@@ -3,9 +3,15 @@ const app = express();
 const port = process.env.PORT || 3000;
 require("dotenv").config();
 const mysql = require("mysql");
+const mysql2 = require("mysql2/promise");
 const bodyParser = require("body-parser");
 const url = require("url");
 var session = require("express-session");
+const bcrypt = require("bcrypt");
+const { async } = require("regenerator-runtime");
+const { resolve } = require("path");
+//const { reject } = require("core-js/fn/promise");
+const saltRounds = 10;
 app.use(
   session({ secret: "mySecret", resave: false, saveUninitialized: false })
 );
@@ -61,6 +67,7 @@ app.post("/login", (req, res) => {
   var msg = req.session.message;
   console.log("123" + msg);
   console.log(req.session.hostname);
+  console.log(req.session);
 
   const conn2 = mysql.createConnection({
     host: req.session.hostname,
@@ -76,6 +83,116 @@ app.post("/login", (req, res) => {
       success: rows,
     });
   });
+});
+
+app.post("/regist", async (req, res) => {
+  var body = req.body;
+  var sql2 =
+    "INSERT INTO  usermt(SiteID, UserName, UserReal,Password, EncPassword) values (?,?,?,?,?)  ";
+  var encp = null;
+
+  async function hold() {
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      if (err) return;
+
+      bcrypt.hash(body.EncPassword, salt, function (err, hash) {
+        if (err) return;
+        encp = hash;
+        console.log(encp);
+      });
+    });
+  }
+  await hold();
+  setTimeout(() => update(), 2000);
+
+  async function update() {
+    var params = [
+      body.SiteID,
+      body.UserName,
+      body.UserReal,
+      body.EncPassword,
+      encp,
+    ];
+
+    const conn2 = mysql.createConnection({
+      host: process.env.HOST,
+      user: process.env.DBUN,
+      password: process.env.DBPW,
+      database: process.env.DATABASE,
+      port: process.env.MYSQLPORT,
+    });
+
+    conn2.query(sql2, params, function (err, rows, fields) {
+      if (err) console.log(" 실패 \n" + err);
+      else console.log(rows);
+      res.status(200).json({
+        success: rows,
+      });
+    });
+  }
+
+  // await update();
+});
+
+app.post("/regist2", (req, res) => {
+  var body = req.body;
+  var encp = null;
+
+  async function hold() {
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      if (err) return;
+
+      bcrypt.hash(body.EncPassword, salt, function (err, hash) {
+        if (err) return;
+        encp = hash;
+        console.log(encp);
+      });
+    });
+  }
+
+  setTimeout(() => db(), 2000);
+
+  const db = async () => {
+    await hold();
+
+    try {
+      // db connection
+      let connection = await mysql2.createConnection({
+        host: process.env.HOST,
+        user: process.env.DBUN,
+        password: process.env.DBPW,
+        database: process.env.DATABASE,
+        port: process.env.MYSQLPORT,
+      });
+
+      // insert data
+      let data = {
+        EncPassword: encp,
+      };
+
+      // insert data into example table
+
+      await connection.query(
+        // "UPDATE usermt SET EncPassword = ? WHERE SiteID = ? and UserReal = ?",
+        // encp,
+        // body.SiteID,
+        // body.UserReal
+        "UPDATE usermt SET EncPassword = '" +
+          encp +
+          "' WHERE SiteID = '" +
+          body.SiteID +
+          "' and UserName = '" +
+          body.UserName +
+          "'"
+      );
+
+      console.log("qqqqq");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  hold();
 });
 
 app.listen(port, () => {
