@@ -12,10 +12,12 @@ const { async } = require("regenerator-runtime");
 const { resolve } = require("path");
 //const { reject } = require("core-js/fn/promise");
 const saltRounds = 10;
+const cors = require("cors");
 app.use(
   session({ secret: "mySecret", resave: false, saveUninitialized: false })
 );
 
+app.use(cors());
 //application/urlencoded
 app.use(express.urlencoded({ extended: true }));
 
@@ -32,56 +34,78 @@ const connection = mysql.createConnection({
 
 app.get("/", (req, res) => res.send("eos8"));
 
-app.post("/myjob", (req, res) => {
+app.post("/myjob", cors(), (req, res) => {
   var body = req.body;
 
   var sql =
-    "SELECT HostName FROM aspmt m, hostmt h WHERE ASPNAME = ? AND siteid = ? AND m.HostID = h.HostID";
+    "SELECT HostName, AspName  FROM AspMt m, HostMt h WHERE AspName = ? AND SiteId = ? AND m.HostID = h.HostID";
 
-  var params = [body.aspname, body.siteid, body.userid];
+  var params = [body.AspName, body.SiteId, body.UserId];
   connection.query(sql, params, function (err, rows, fields) {
     if (err) console.log(" 실패 \n" + err);
-    else body.hostname = rows[0].HostName;
-    console.log("1번" + rows[0].HostName);
-    console.log("2번" + req.body.hostname);
-    console.log(req.body);
-    //var hostname = rows[0].HostName;
-    req.params.message = rows[0].HostName;
-    req.session.hostname = rows[0].HostName;
-    //res.send({ hostname: rows[0].HostName });
-    //req.sesseion.hostname = "123";
+    else req.session.HostName = rows[0].HostName;
+    req.session.AspName = rows[0].AspName;
+    console.log(req.session.HostName);
+    console.log(req.session.AspName);
     res.redirect(307, "/login");
-    console.log(req.body);
   });
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", cors(), (req, res) => {
   var body = req.body;
-  var sql2 = "SELECT UserReal FROM usermt WHERE UserID=? and SiteID = ?";
-  var params = [body.userid, body.siteid];
-  const {
-    body: { userid, siteid, aspname, hostname },
-  } = req;
-  console.log("3번" + userid, siteid, aspname, hostname);
-  console.log(req.body);
-  var msg = req.session.message;
-  console.log("123" + msg);
-  console.log(req.session.hostname);
-  console.log(req.session);
+  var passSql =
+    "SELECT EncPassword FROM usermt WHERE UserName=? and SiteID = ?";
+  var params = [body.UserName, body.SiteId];
 
   const conn2 = mysql.createConnection({
-    host: req.session.hostname,
+    host: req.session.HostName,
     user: process.env.DBUN,
     password: process.env.DBPW,
-    database: process.env.DATABASE,
+    //database: process.env.DATABASE,
+    database: req.session.AspName,
     port: process.env.MYSQLPORT,
   });
-  conn2.query(sql2, params, function (err, rows, fields) {
+  conn2.query(passSql, params, async function (err, rows, fields) {
     if (err) console.log(" 실패 \n" + err);
-    else console.log(rows);
-    res.status(200).json({
-      success: rows,
-    });
+    else {
+      if (rows[0].EncPassword == null) {
+        res.status(200).json({
+          fail: "웹 회원이 아닙니다",
+        });
+        return;
+      }
+      var check = await bcrypt.compare(body.EncPassword, rows[0].EncPassword);
+      if (!check) {
+        res.status(200).json({
+          fail: "비밀번호가 다릅니다.",
+        });
+        return;
+      } else {
+        // res.status(200).json({
+        //   sucess:
+        //     "로그인 성공, 접속호스트 : " +
+        //     req.session.HostName +
+        //     "접속 db명 : " +
+        //     req.session.AspName,
+        // });
+
+        res.redirect(307, "/getacntmt");
+      }
+    }
+  });
+
+  //토큰생성
+}); //login
+
+app.post("/getacntmt", cors(), (req, res) => {
+  var sql = "SELECT * from " + req.session.AspName + ".acntmt";
+  var params = [];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
   });
 });
 
@@ -124,10 +148,13 @@ app.post("/regist", async (req, res) => {
 
     conn2.query(sql2, params, function (err, rows, fields) {
       if (err) console.log(" 실패 \n" + err);
-      else console.log(rows);
-      res.status(200).json({
-        success: rows,
-      });
+      else {
+        console.log(rows);
+
+        res.status(200).json({
+          success: rows,
+        });
+      }
     });
   }
 

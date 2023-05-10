@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="//code.jquery.com/jquery-3.3.1.min.js"></script> -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <title>EOS8 WEB LOGIN</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
+
+        * {
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: #1bbc9b;
+        }
+
+        .login-form {
+            /* border: 3px solid red; */
+            border-radius: 5px;
+            width: 300px;
+            background-color: #eeeff1;
+            padding: 20px;
+            margin: 50px auto;
+        }
+
+        .text-field {
+            font-size: 14px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 같은 width 100% 인데 submit 은 박스사이징을 안해도 되는 이유는
+        submit에는 자동으로 border-box가 적용이 된다 */
+        .submit-btn {
+            font-size: 14px;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #1bbc9b;
+            border: none;
+            width: 100%;
+        }
+
+        .links {
+            text-align: center;
+            margin: 30px;
+        }
+
+        .links a {
+            color: #9b9b9b;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+
+    <script>
+        function f_login() {
+
+
+
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+    <div id="login-form" class="login-form"">
+      <form action=" http://localhost:3000/myjob" method="post">
+        <input type="text" class="text-field" name="AspName" placeholder="계정 ID" />
+        <input type="text" class="text-field" name="SiteId" placeholder="매장번호" />
+        <input type="text" class="text-field" name="UserName" placeholder="사용자 ID" />
+        <input type="password" class="text-field" name="EncPassword" placeholder="비밀번호" />
+        <input type="submit" onclick="f_login()" class="submit-btn" value="로그인" />
+        </form>
+        <div class="links">
+            <a href="#none">비밀번호를 잊어버리셨나요?</a>
+        </div>
+    </div>
+</body>
+
+</html>
