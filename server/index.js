@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 require("dotenv").config();
 const mysql = require("mysql");
 const mysql2 = require("mysql2/promise");
@@ -171,7 +171,7 @@ app.post("/api/users/getacntmt", cors(), (req, res) => {
   });
 });
 
-app.get("/api/hello", (req, res) => {
+app.get("/api/hello", cors(), (req, res) => {
   res.send("gd");
 });
 
