@@ -56,10 +56,19 @@ function LoginPage(props) {
         alignItems: "center",
         width: "100%",
         height: "100vh",
+        //width: "300px",
+        borderRadius: "5%",
+        backgroundColor: "#B2EBF4",
+        padding: "20px",
+        //margin: "50px",
       }}
     >
       <form
-        style={{ display: "flex", flexDirection: "column" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "5px",
+        }}
         onSubmit={onSumbitHandler}
       >
         <label>계정 ID </label>
