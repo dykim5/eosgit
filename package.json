@@ -118,6 +118,8 @@
     "promise-mysql": "^5.2.0",
     "pub": "^0.2.0",
     "pug": "^3.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "regenerate": "^1.4.2",
     "regenerate-unicode-properties": "^10.1.0",
     "regenerator-runtime": "^0.13.11",
