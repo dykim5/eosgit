@@ -10,9 +10,14 @@ var session = require("express-session");
 const bcrypt = require("bcrypt");
 const { async } = require("regenerator-runtime");
 const { resolve } = require("path");
+const { auth } = require("./middleware/auth");
 //const { reject } = require("core-js/fn/promise");
 const saltRounds = 10;
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+//import jwt from "jsonwebtoken";
+
 app.use(
   session({ secret: "mySecret", resave: false, saveUninitialized: false })
 );
@@ -23,6 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 
 //application/json
 app.use(express.json());
+app.use(cookieParser());
+//app.use(auth);
 
 const connection = mysql.createConnection({
   host: process.env.MYJOBHOST,
@@ -34,7 +41,7 @@ const connection = mysql.createConnection({
 
 app.get("/", (req, res) => res.send("eos8"));
 
-app.post("/myjob", cors(), (req, res) => {
+app.post("/api/users/myjob", cors(), (req, res) => {
   var body = req.body;
 
   var sql =
@@ -47,14 +54,14 @@ app.post("/myjob", cors(), (req, res) => {
     req.session.AspName = rows[0].AspName;
     console.log(req.session.HostName);
     console.log(req.session.AspName);
-    res.redirect(307, "/login");
+    res.redirect(307, "/api/users/login");
   });
 });
 
-app.post("/login", cors(), (req, res) => {
+app.post("/api/users/login", cors(), (req, res) => {
   var body = req.body;
   var passSql =
-    "SELECT EncPassword FROM usermt WHERE UserName=? and SiteID = ?";
+    "SELECT EncPassword , UserID FROM usermt WHERE UserName=? and SiteID = ?";
   var params = [body.UserName, body.SiteId];
 
   const conn2 = mysql.createConnection({
@@ -65,15 +72,19 @@ app.post("/login", cors(), (req, res) => {
     database: req.session.AspName,
     port: process.env.MYSQLPORT,
   });
+
   conn2.query(passSql, params, async function (err, rows, fields) {
     if (err) console.log(" 실패 \n" + err);
     else {
+      var UserID = rows[0].UserID;
       if (rows[0].EncPassword == null) {
         res.status(200).json({
           fail: "웹 회원이 아닙니다",
         });
         return;
       }
+
+      //비밀번호 비교
       var check = await bcrypt.compare(body.EncPassword, rows[0].EncPassword);
       if (!check) {
         res.status(200).json({
@@ -89,15 +100,66 @@ app.post("/login", cors(), (req, res) => {
         //     req.session.AspName,
         // });
 
-        res.redirect(307, "/getacntmt");
+        //비밀번호가 맞다면 토큰 생성
+
+        var token = jwt.sign(UserID, "secretToken");
+
+        var tokenSql =
+          "UPDATE " +
+          req.session.AspName +
+          ".Usermt Set Token='" +
+          token +
+          "'WHERE UserID ='" +
+          UserID +
+          "'";
+        console.log(token);
+        conn2.query(tokenSql, params, function (err, rows, fields) {
+          if (err) return res.status(400).send(err);
+          else {
+            //토큰을 쿠키에 저장한다.
+            res
+              .cookie("x_auth", token)
+              .status(200)
+              .json({ loginSuccess: true, UserID: UserID });
+            //res.redirect(307, "/getacntmt");
+            console.log("auth 체크");
+            //res.redirect("/api/users/auth");
+            console.log("red");
+          }
+        });
       }
     }
   });
-
-  //토큰생성
 }); //login
 
-app.post("/getacntmt", cors(), (req, res) => {
+app.get("/api/users/logout", auth, (req, res) => {
+  //유저 찾아서 db에서 토큰 지워주기
+  var deleteSql =
+    "UPDATE " +
+    req.session.AspName +
+    ".Usermt Set Token='' WHERE UserID ='" +
+    UserID +
+    "'";
+  var params = [];
+  connection.query(deleteSql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+}); //logout
+
+app.get("/api/users/auth", auth, (req, res) => {
+  //여기 까지 밀드웨어를 통과했다는것은 true 라는 말
+  res.status(200).json({
+    UserID: req.UserID,
+    isSuperVisor: req.IsSuperVisor,
+    isAuth: true,
+  });
+});
+
+app.post("/api/users/getacntmt", cors(), (req, res) => {
   var sql = "SELECT * from " + req.session.AspName + ".acntmt";
   var params = [];
   connection.query(sql, params, function (err, rows, fields) {
@@ -109,7 +171,13 @@ app.post("/getacntmt", cors(), (req, res) => {
   });
 });
 
-app.post("/regist", async (req, res) => {
+app.get("/api/hello", (req, res) => {
+  res.send("gd");
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
+app.post("/api/users/regist", async (req, res) => {
   var body = req.body;
   var sql2 =
     "INSERT INTO  usermt(SiteID, UserName, UserReal,Password, EncPassword) values (?,?,?,?,?)  ";
@@ -161,7 +229,7 @@ app.post("/regist", async (req, res) => {
   // await update();
 });
 
-app.post("/regist2", (req, res) => {
+app.post("/api/users/regist2", (req, res) => {
   var body = req.body;
   var encp = null;
 
