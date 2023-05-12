@@ -3,11 +3,11 @@ import { LOGIN_USER } from "./types";
 
 export function loginUser(dataTosubmit) {
   const request = axios
-    .post("/api/user/myjob", dataTosubmit)
+    .post("/api/users/myjob", dataTosubmit)
     .then((response) => response.data);
 
   return {
-    type: "LOGIN_USER",
+    type: LOGIN_USER,
     payload: request,
   };
 }

@@ -79,7 +79,8 @@ app.post("/api/users/login", cors(), (req, res) => {
       var UserID = rows[0].UserID;
       if (rows[0].EncPassword == null) {
         res.status(200).json({
-          fail: "웹 회원이 아닙니다",
+          loginSuccess: false,
+          msg: "웹 회원이 아닙니다",
         });
         return;
       }
@@ -88,7 +89,8 @@ app.post("/api/users/login", cors(), (req, res) => {
       var check = await bcrypt.compare(body.EncPassword, rows[0].EncPassword);
       if (!check) {
         res.status(200).json({
-          fail: "비밀번호가 다릅니다.",
+          loginSuccess: false,
+          msg: "비밀번호가 다릅니다.",
         });
         return;
       } else {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+//import Axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../_actions/user_action";
 
@@ -38,10 +38,12 @@ function LoginPage(props) {
     };
 
     dispatch(loginUser(body)).then((response) => {
-      if (response.payload.loginSucess) {
-        props.history.push("/");
+      console.log(response);
+      if (response.payload.loginSuccess) {
+        alert("로그인성공");
+        //props.history.push("/");
       } else {
-        alert("error");
+        alert(response.payload.msg);
       }
     });
   };
