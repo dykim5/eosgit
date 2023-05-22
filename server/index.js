@@ -19,7 +19,11 @@ const cookieParser = require("cookie-parser");
 //import jwt from "jsonwebtoken";
 
 app.use(
-  session({ secret: "mySecret", resave: false, saveUninitialized: false })
+  session({
+    secret: "mySecret",
+    resave: false,
+    saveUninitialized: false,
+  })
 );
 
 app.use(cors());
@@ -44,8 +48,7 @@ app.get("/", (req, res) => res.send("eos8"));
 app.post("/api/users/myjob", cors(), (req, res) => {
   var body = req.body;
 
-  var sql =
-    "SELECT HostName, AspName  FROM AspMt m, HostMt h WHERE AspName = ? AND SiteId = ? AND m.HostID = h.HostID";
+  var sql = "SELECT HostName, AspName  FROM AspMt m, HostMt h WHERE AspName = ? AND SiteId = ? AND m.HostID = h.HostID";
 
   var params = [body.AspName, body.SiteId, body.UserId];
   connection.query(sql, params, function (err, rows, fields) {
@@ -60,8 +63,7 @@ app.post("/api/users/myjob", cors(), (req, res) => {
 
 app.post("/api/users/login", cors(), (req, res) => {
   var body = req.body;
-  var passSql =
-    "SELECT EncPassword , UserID FROM usermt WHERE UserName=? and SiteID = ?";
+  var passSql = "SELECT EncPassword , UserID FROM usermt WHERE UserName=? and SiteID = ?";
   var params = [body.UserName, body.SiteId];
 
   const conn2 = mysql.createConnection({
@@ -106,23 +108,16 @@ app.post("/api/users/login", cors(), (req, res) => {
 
         var token = jwt.sign(UserID, "secretToken");
 
-        var tokenSql =
-          "UPDATE " +
-          req.session.AspName +
-          ".Usermt Set Token='" +
-          token +
-          "'WHERE UserID ='" +
-          UserID +
-          "'";
+        var tokenSql = "UPDATE " + req.session.AspName + ".Usermt Set Token='" + token + "'WHERE UserID ='" + UserID + "'";
         console.log(token);
         conn2.query(tokenSql, params, function (err, rows, fields) {
           if (err) return res.status(400).send(err);
           else {
             //토큰을 쿠키에 저장한다.
-            res
-              .cookie("x_auth", token)
-              .status(200)
-              .json({ loginSuccess: true, UserID: UserID });
+            res.cookie("x_auth", token).status(200).json({
+              loginSuccess: true,
+              UserID: UserID,
+            });
             //res.redirect(307, "/getacntmt");
             console.log("auth 체크");
             //res.redirect("/api/users/auth");
@@ -136,12 +131,7 @@ app.post("/api/users/login", cors(), (req, res) => {
 
 app.get("/api/users/logout", auth, (req, res) => {
   //유저 찾아서 db에서 토큰 지워주기
-  var deleteSql =
-    "UPDATE " +
-    req.session.AspName +
-    ".Usermt Set Token='' WHERE UserID ='" +
-    UserID +
-    "'";
+  var deleteSql = "UPDATE " + req.session.AspName + ".Usermt Set Token='' WHERE UserID ='" + UserID + "'";
   var params = [];
   connection.query(deleteSql, params, function (err, rows, fields) {
     if (err) console.log(" 실패 \n" + err);
@@ -181,8 +171,7 @@ app.get("/api/hello", cors(), (req, res) => {
 
 app.post("/api/users/regist", async (req, res) => {
   var body = req.body;
-  var sql2 =
-    "INSERT INTO  usermt(SiteID, UserName, UserReal,Password, EncPassword) values (?,?,?,?,?)  ";
+  var sql2 = "INSERT INTO  usermt(SiteID, UserName, UserReal,Password, EncPassword) values (?,?,?,?,?)  ";
   var encp = null;
 
   async function hold() {
@@ -200,13 +189,7 @@ app.post("/api/users/regist", async (req, res) => {
   setTimeout(() => update(), 2000);
 
   async function update() {
-    var params = [
-      body.SiteID,
-      body.UserName,
-      body.UserReal,
-      body.EncPassword,
-      encp,
-    ];
+    var params = [body.SiteID, body.UserName, body.UserReal, body.EncPassword, encp];
 
     const conn2 = mysql.createConnection({
       host: process.env.HOST,
@@ -274,13 +257,7 @@ app.post("/api/users/regist2", (req, res) => {
         // encp,
         // body.SiteID,
         // body.UserReal
-        "UPDATE usermt SET EncPassword = '" +
-          encp +
-          "' WHERE SiteID = '" +
-          body.SiteID +
-          "' and UserName = '" +
-          body.UserName +
-          "'"
+        "UPDATE usermt SET EncPassword = '" + encp + "' WHERE SiteID = '" + body.SiteID + "' and UserName = '" + body.UserName + "'"
       );
 
       console.log("qqqqq");

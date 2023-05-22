@@ -81,11 +81,7 @@ function LoginPage(props) {
         <input type="text" value={UserName} onChange={onUserNameHandler} />
 
         <label>비밀번호 </label>
-        <input
-          type="password"
-          value={EncPassword}
-          onChange={onEncPasswordHandler}
-        />
+        <input type="password" value={EncPassword} onChange={onEncPasswordHandler} />
         <br />
         <button>login</button>
       </form>

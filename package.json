@@ -45,6 +45,8 @@
     "es-to-primitive": "^1.2.1",
     "escalade": "^3.1.1",
     "escape-string-regexp": "^1.0.5",
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-usb": "^3.0.0-alpha.4",
     "esutils": "^2.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
