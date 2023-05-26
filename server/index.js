@@ -43,6 +43,9 @@ const connection = mysql.createConnection({
   port: process.env.MYSQLPORT,
 });
 
+var con2Host = null;
+var con2DB = null;
+
 app.get("/", (req, res) => res.send("eos8"));
 
 app.post("/api/users/myjob", cors(), (req, res) => {
@@ -66,12 +69,17 @@ app.post("/api/users/login", cors(), (req, res) => {
   var passSql = "SELECT EncPassword , UserID FROM usermt WHERE UserName=? and SiteID = ?";
   var params = [body.UserName, body.SiteId];
 
+  con2Host = req.session.HostName;
+  con2DB = req.session.AspName;
+  console.log("호스트명" + con2Host);
+  console.log(con2DB);
+
   const conn2 = mysql.createConnection({
-    host: req.session.HostName,
+    host: con2Host,
     user: process.env.DBUN,
     password: process.env.DBPW,
     //database: process.env.DATABASE,
-    database: req.session.AspName,
+    database: con2DB,
     port: process.env.MYSQLPORT,
   });
 
@@ -79,6 +87,7 @@ app.post("/api/users/login", cors(), (req, res) => {
     if (err) console.log(" 실패 \n" + err);
     else {
       var UserID = rows[0].UserID;
+      req.session.UserID = UserID;
       if (rows[0].EncPassword == null) {
         res.status(200).json({
           loginSuccess: false,
@@ -129,15 +138,28 @@ app.post("/api/users/login", cors(), (req, res) => {
   });
 }); //login
 
-app.get("/api/users/logout", auth, (req, res) => {
+app.get("/api/users/logout", cors(), (req, res) => {
   //유저 찾아서 db에서 토큰 지워주기
-  var deleteSql = "UPDATE " + req.session.AspName + ".Usermt Set Token='' WHERE UserID ='" + UserID + "'";
+  console.log(req.session);
+  var deleteSql = "UPDATE " + req.session.AspName + ".Usermt Set Token='' WHERE UserID ='" + req.session.UserID + "'";
   var params = [];
-  connection.query(deleteSql, params, function (err, rows, fields) {
+
+  console.log("파라미터" + deleteSql);
+
+  const conn2 = mysql.createConnection({
+    host: con2Host,
+    user: process.env.DBUN,
+    password: process.env.DBPW,
+    //database: process.env.DATABASE,
+    database: con2DB,
+    port: process.env.MYSQLPORT,
+  });
+
+  conn2.query(deleteSql, params, function (err, rows, fields) {
     if (err) console.log(" 실패 \n" + err);
     else
       res.status(200).json({
-        success: rows,
+        success: true,
       });
   });
 }); //logout
