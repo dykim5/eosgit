@@ -87,6 +87,7 @@
     "is-typed-array": "^1.1.10",
     "is-weakref": "^1.0.2",
     "isobject": "^3.0.1",
+    "jquery": "^3.7.0",
     "js-tokens": "^4.0.0",
     "jsesc": "^2.5.2",
     "json5": "^2.2.3",

@@ -11,6 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" Component={Auth(LoginPage, null)} />
+        {/* <Route exact path="/" Component={LoginPage} /> */}
         <Route exact path="/main" Component={Auth(LandingPage, true)} />
         <Route exact path="/register" Component={Auth(RegisterPage)} />
       </Routes>

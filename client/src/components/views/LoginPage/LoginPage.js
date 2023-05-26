@@ -7,19 +7,37 @@ import backimg from "../../../img/back.png";
 import { Button, Space, Input, Form, Checkbox, DatePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import $ from "jquery";
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY/MM/DD";
 const weekFormat = "MM/DD";
 const monthFormat = "YYYY/MM";
-var nowDate = dayjs();
+
+//window.localStorage.setItem("AddHour", 24);
+
+var AddHour = window.localStorage.getItem("AddHour") ?? 0;
+var nowDate = dayjs().add(AddHour, "hour");
+var isFirst = window.localStorage.getItem("isFirst");
+var isFirstCeck = isFirst ?? true;
+
+console.log(isFirstCeck);
+
+function hide() {
+  if (isFirstCeck) {
+    console.log("숨기기");
+    $("#hideDiv").hide();
+  }
+}
+
+//debugger;
 
 //날짜 관련
 const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
 const customFormat = (value) => `custom format: ${value.format(dateFormat)}`;
 const customWeekStartEndFormat = (value) => `${dayjs(value).startOf("week").format(weekFormat)} ~ ${dayjs(value).endOf("week").format(weekFormat)}`;
 
-function LoginPage(props) {
+function LoginPage() {
   const dispatch = useDispatch();
   const [AspName, setAspName] = useState("");
   const [SiteId, setSiteId] = useState("");
@@ -99,6 +117,7 @@ function LoginPage(props) {
 
   return (
     <div
+      id="isFirst3"
       style={{
         display: "flex",
         justifyContent: "center",
@@ -180,15 +199,29 @@ function LoginPage(props) {
         >
           <Input.Password />
         </Form.Item> */}
-        <label style={{ color: "white" }}> 업무일자 </label>
-        <DatePicker defaultValue={nowDate} format={dateFormat} />
+        <label id="isFirst" name="isFirst" className="isFirst" style={{ color: "white" }}>
+          {" "}
+          업무일자{" "}
+        </label>
+        <DatePicker id="isFirst2" defaultValue={nowDate} format={dateFormat} />
+        <div
+          style={
+            {
+              //display: "flex",
+              //justifyContent: "center",
+              //alignItems: "center",
+              //width: "100%",
+              //height: "100vh",
+            }
+          }
+          id="hideDiv"
+        >
+          <label style={{ color: "white" }}> 계정 ID </label>
+          <Input size="small" value={AspName} onChange={onAspNameHandler} />
 
-        <label style={{ color: "white" }}> 계정 ID </label>
-        <Input size="small" value={AspName} onChange={onAspNameHandler} />
-
-        <label style={{ color: "white" }}> 매장번호</label>
-        <Input size="small" value={SiteId} onChange={onSiteIdHandler} />
-
+          <label style={{ color: "white" }}> 매장번호</label>
+          <Input size="small" value={SiteId} onChange={onSiteIdHandler} />
+        </div>
         <label style={{ color: "white" }}>사용자 ID </label>
         <Input size="small" value={UserName} onChange={onUserNameHandler} />
 
@@ -220,5 +253,6 @@ function LoginPage(props) {
     </div>
   );
 }
+hide();
 
 export default LoginPage;
