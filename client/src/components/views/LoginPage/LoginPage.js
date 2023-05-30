@@ -19,23 +19,14 @@ const monthFormat = "YYYY/MM";
 var AddHour = window.localStorage.getItem("AddHour") ?? 0;
 var nowDate = dayjs().add(AddHour, "hour");
 var isFirst = window.localStorage.getItem("isFirst");
-var isFirstCeck = isFirst ?? true;
-
-console.log(isFirstCeck);
-
-function hide() {
-  if (isFirstCeck) {
-    console.log("숨기기");
-    $("#hideDiv").hide();
-  }
-}
+var isFirstCheck = isFirst ?? true;
 
 //debugger;
 
 //날짜 관련
-const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
-const customFormat = (value) => `custom format: ${value.format(dateFormat)}`;
-const customWeekStartEndFormat = (value) => `${dayjs(value).startOf("week").format(weekFormat)} ~ ${dayjs(value).endOf("week").format(weekFormat)}`;
+// const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
+// const customFormat = (value) => `custom format: ${value.format(dateFormat)}`;
+// const customWeekStartEndFormat = (value) => `${dayjs(value).startOf("week").format(weekFormat)} ~ ${dayjs(value).endOf("week").format(weekFormat)}`;
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -44,34 +35,7 @@ function LoginPage() {
   const [UserName, setUserName] = useState("");
   const [EncPassword, setEncPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = React.useState(false);
-
-  // const onFinish = (evnet) => {
-  //   //페이지 refresh를 막아준다
-  //   event.preventDefault();
-
-  //   let body = {
-  //     AspName: AspName,
-  //     SiteId: SiteId,
-  //     UserName: UserName,
-  //     EncPassword: EncPassword,
-  //   };
-
-  //   dispatch(loginUser(body)).then((response) => {
-  //     console.log(response);
-  //     if (response.payload.loginSuccess) {
-  //       //alert("로그인성공");
-  //       //props.history.push("/");
-  //       // window.location.replace("/main");
-  //       navigate("/main");
-  //     } else {
-  //       alert(response.payload.msg);
-  //     }
-  //   });
-  // };
-
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log("Failed:", errorInfo);
-  // };
+  // const [style, setStyle] = useState({ display: "none" });
 
   const onAspNameHandler = (event) => {
     setAspName(event.currentTarget.value);
@@ -95,9 +59,15 @@ function LoginPage() {
     //페이지 refresh를 막아준다
     //event.preventDefault();
 
+    var SendAspName = window.localStorage.getItem("AspName") ?? AspName;
+    var SendSiteId = window.localStorage.getItem("SiteId") ?? SiteId;
+
+    console.log(SendAspName);
+    console.log(SendSiteId);
+
     let body = {
-      AspName: AspName,
-      SiteId: SiteId,
+      AspName: SendAspName,
+      SiteId: SendSiteId,
       UserName: UserName,
       EncPassword: EncPassword,
     };
@@ -105,9 +75,9 @@ function LoginPage() {
     dispatch(loginUser(body)).then((response) => {
       console.log(response);
       if (response.payload.loginSuccess) {
-        //alert("로그인성공");
-        //props.history.push("/");
-        // window.location.replace("/main");
+        window.localStorage.setItem("AspName", SendAspName);
+        window.localStorage.setItem("SiteId", SendSiteId);
+        window.localStorage.setItem("isFirst", false);
         navigate("/main");
       } else {
         alert(response.payload.msg);
@@ -117,7 +87,6 @@ function LoginPage() {
 
   return (
     <div
-      id="isFirst3"
       style={{
         display: "flex",
         justifyContent: "center",
@@ -139,89 +108,35 @@ function LoginPage() {
           remember: true,
         }}
         onFinish={onFinish}
-        // onFinishFailed={onFinishFailed}
         autoComplete="off"
         style={{
           display: "flex",
           flexDirection: "column",
           position: "relative",
           bottom: "-30%",
-          //background: "white",
-          //border: "round",
         }}
-        //onSubmit={onSumbitHandler}
       >
-        {/* <Form.Item
-          label="계정 ID"
-          name="AspName"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="매장번호"
-          name="SiteId"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="사용자 ID"
-          name="UserName"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="비밀번호"
-          name="EncPassword"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item> */}
-        <label id="isFirst" name="isFirst" className="isFirst" style={{ color: "white" }}>
-          {" "}
-          업무일자{" "}
-        </label>
-        <DatePicker id="isFirst2" defaultValue={nowDate} format={dateFormat} />
-        <div
-          style={
-            {
-              //display: "flex",
-              //justifyContent: "center",
-              //alignItems: "center",
-              //width: "100%",
-              //height: "100vh",
-            }
-          }
-          id="hideDiv"
-        >
-          <label style={{ color: "white" }}> 계정 ID </label>
-          <Input size="small" value={AspName} onChange={onAspNameHandler} />
+        {isFirstCheck === true ? null : (
+          <div>
+            <label id="isFirst" name="isFirst" className="isFirst" style={{ color: "white" }}>
+              업무일자{" "}
+            </label>
+            <br></br>
+            <DatePicker id="isFirst2" defaultValue={nowDate} format={dateFormat} />
+          </div>
+        )}
 
-          <label style={{ color: "white" }}> 매장번호</label>
-          <Input size="small" value={SiteId} onChange={onSiteIdHandler} />
-        </div>
+        {/* <div style={style}> </div> */}
+        {isFirstCheck === true ? (
+          <div>
+            {" "}
+            <label style={{ color: "white" }}> 계정 ID </label>
+            <Input size="small" value={AspName} onChange={onAspNameHandler} />
+            <label style={{ color: "white" }}> 매장번호</label>
+            <Input size="small" value={SiteId} onChange={onSiteIdHandler} />{" "}
+          </div>
+        ) : null}
+
         <label style={{ color: "white" }}>사용자 ID </label>
         <Input size="small" value={UserName} onChange={onUserNameHandler} />
 
@@ -253,6 +168,5 @@ function LoginPage() {
     </div>
   );
 }
-hide();
 
 export default LoginPage;
