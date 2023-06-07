@@ -10,6 +10,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@grapecity/wijmo.all": "^5.20231.888",
     "ansi-styles": "^3.2.1",
     "array-buffer-byte-length": "^1.0.0",
     "array.prototype.reduce": "^1.0.5",
@@ -19,6 +20,7 @@
     "babel-plugin-polyfill-regenerator": "^0.4.1",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "bootstrap": "^5.3.0",
     "browserslist": "^4.21.5",
     "buffer-from": "^1.1.2",
     "call-bind": "^1.0.2",
@@ -122,6 +124,7 @@
     "pub": "^0.2.0",
     "pug": "^3.0.2",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "regenerate": "^1.4.2",
     "regenerate-unicode-properties": "^10.1.0",
