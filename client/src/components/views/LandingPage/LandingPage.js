@@ -1,28 +1,29 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { MenuFoldOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined, FileOutlined, PoweroffOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, UserOutlined, FileOutlined, PoweroffOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { Button, Layout, Menu, theme, Space, Select, Input } from "antd";
+import { Button, Layout, Menu, theme, Space, Select, Input, Row, Col } from "antd";
 import { useState } from "react";
 import logo1 from "../../../img/logo1.png";
 import NavBar from "../NavBar/NavBar";
-import mgrid from "./app";
-//import * as wijmo from "../../../scripts/vendor/controls/wijmo.min.js";
-//import wijmo from "https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.min.js";
-
-// import { ODataCollectionView } from "../../../scripts/vendor/controls/wijmo.odata.min.js";
-//import { ODataCollectionView } from "../../../scripts/vendor/controls/wijmo.odata.min.js";
-//import { FlexGrid } from "../../../scripts/vendor/controls/wijmo.grid.min2.js";
+import mgrid from "./mainGrid";
+import "./middleGrid.css";
+import "./topGrid.css";
 
 <script src="../../../scripts/vendor/controls/wijmo.min.js"></script>;
 <script src="../../../scripts/vendor/controls/wijmo.grid.min.js"></script>;
 <script src="../../../scripts/vendor/controls/cultures/wijmo.culture.ko.min.js"></script>;
-//document.readyState === "complete" ? init() : (window.onload = init);
 
 const { Header, Sider, Content } = Layout;
 const { Option } = Select;
 
 const dispatch = useDispatch;
+
+const rightTopButtonstyle = {
+  background: "#dde9f2",
+  padding: "30px",
+  flex: "0 0 20%",
+};
 
 const onclickHandler = () => {
   axios.get("/api/users/logout").then((response) => {
@@ -158,7 +159,7 @@ function LandingPage(props) {
 
               <br />
 
-              <div id="app" style={{ height: "250px" }}></div>
+              <div id="mainGrid" style={{ height: "450px" }}></div>
             </div>
             {/* ################################## 세로 템플릿 ######################################### */}
             {/* ################################## 세로 템플릿 ######################################### */}
@@ -178,7 +179,141 @@ function LandingPage(props) {
                 //height: "100vh",
               }}
             >
-              <h2> 우 </h2>
+              {/* <Row gutter={[1, 1]} style={{ flex: " 0 0 20%" }}>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>test</div>
+                </Col>
+                <Col className="gutter-row" span={5}>
+                  <div style={rightTopButtonstyle}>1page</div>
+                </Col>
+              </Row> */}
+              <div class="topGrid">
+                <div class="div1 mg tg">test </div>
+                <div class="div2 mg tg">test </div>
+                <div class="div3 mg tg">test </div>
+                <div class="div4 mg tg">test </div>
+                <div class="div5 mg tg">test </div>
+                <div class="div6 mg tg">test </div>
+                <div class="div7 mg tg">test </div>
+                <div class="div8 mg tg">test </div>
+                <div class="div9 mg tg">test </div>
+                <div class="div10 mg tg">test </div>
+                <div class="div11 mg tg">test </div>
+                <div class="div12 mg tg">test </div>
+                <div class="div13 mg tg">test </div>
+                <div class="div14 mg tg">test </div>
+                <div class="div15 mg tg">test </div>
+                <div class="div16 mg tg">test </div>
+                <div class="div17 mg tg">test </div>
+                <div class="div18 mg tg">test </div>
+                <div class="div19 mg tg">test </div>
+                <div class="div20 mg tg">test </div>
+                <div class="div21 mg tg">test </div>
+                <div class="div22 mg tg">test </div>
+                <div class="div23 mg tg">test </div>
+                <div class="div24 mg tg">test </div>
+                <div class="div25 mg tg">test </div>
+              </div>
+              <br></br>
+              <div class="middleGrid">
+                <div class="div1 mg">test </div>
+                <div class="div2 mg">test </div>
+                <div class="div3 mg">test </div>
+                <div class="div4 mg">test </div>
+                <div class="div5 mg">test </div>
+                <div class="div6 mg">test </div>
+                <div class="div7 mg">test </div>
+                <div class="div8 mg">test </div>
+                <div class="div9 mg">test </div>
+                <div class="div10 mg">test </div>
+                <div class="div11 mg">test </div>
+                <div class="div12 mg">test </div>
+                <div class="div13 mg">test </div>
+                <div class="div14 mg">test </div>
+                <div class="div15 mg">test </div>
+                <div class="div16 mg">test </div>
+                <div class="div17 mg">test </div>
+                <div class="div18 mg">test </div>
+                <div class="div19 mg">test </div>
+                <div class="div20 mg">test </div>
+                <div class="div21 mg">test </div>
+                <div class="div22 mg">test </div>
+                <div class="div23 mg">test </div>
+                <div class="div24 mg">test </div>
+                <div class="div25 mg">test </div>
+                <div class="div26 mg">test </div>
+                <div class="div27 mg">test </div>
+                <div class="div28 mg">test </div>
+                <div class="div29 mg">test </div>
+                <div class="div30 mg">1page </div>
+              </div>
+              <br></br>
+              <div class="topGrid">
+                <div class="div1 mg bg">test </div>
+                <div class="div2 mg bg">test </div>
+                <div class="div3 mg bg">test </div>
+                <div class="div4 mg bg">test </div>
+                <div class="div5 mg bg">test </div>
+                <div class="div6 mg bg">test </div>
+                <div class="div7 mg bg">test </div>
+                <div class="div8 mg bg">test </div>
+                <div class="div9 mg bg">test </div>
+                <div class="div10 mg bg">test </div>
+                <div class="div11 mg bg">test </div>
+                <div class="div12 mg bg">test </div>
+                <div class="div13 mg bg">test </div>
+                <div class="div14 mg bg">test </div>
+                <div class="div15 mg bg">test </div>
+                <div class="div16 mg bg">test </div>
+                <div class="div17 mg bg">test </div>
+                <div class="div18 mg bg">test </div>
+                <div class="div19 mg bg">test </div>
+                <div class="div20 mg bg">test </div>
+                <div class="div21 mg bg">test </div>
+                <div class="div22 mg bg">test </div>
+                <div class="div23 mg bg">test </div>
+                <div class="div24 mg bg">test </div>
+                <div class="div25 mg bg">test </div>
+              </div>
             </div>
           </Content>
         </Layout>

@@ -1,12 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../styles/wijmo.css";
-import "./app.css";
+import "./mainGrid.css";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 
 //
 import * as wjcGrid from "@grapecity/wijmo.react.grid";
-class App extends React.Component {
+class MainGrid extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,15 +27,16 @@ class App extends React.Component {
   }
   _getData(cnt, start) {
     let data = [];
-    let countries = "USA,Germany,UK,Japan,Italy,Greece".split(",");
+    let countries = "상의,하의,바지,신발,모자,목걸이".split(",");
     if (!start) start = 0;
     for (let i = 0; i < cnt; i++) {
       data.push({
-        id: i + start,
-        country: countries[i % countries.length],
-        date: new Date(2014, i % 12, i % 28),
-        amount: Math.random() * 10000,
-        active: i % 4 === 0,
+        품번: i + start,
+        품명: countries[i % countries.length],
+        단가: Math.random() * 10000,
+        수량: 0,
+        금액: Math.random() * 10000,
+        단가DC: i % 4 === 0,
       });
     }
     return data;
@@ -74,9 +75,9 @@ class App extends React.Component {
   }
 }
 setTimeout(() => {
-  const container = document.getElementById("app");
+  const container = document.getElementById("mainGrid");
   if (container) {
     const root = ReactDOM.createRoot(container);
-    root.render(<App />);
+    root.render(<MainGrid />);
   }
 }, 100);
