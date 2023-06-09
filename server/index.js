@@ -185,6 +185,30 @@ app.post("/api/users/getacntmt", cors(), (req, res) => {
   });
 });
 
+app.post("/api/users/getacntmt2", cors(), (req, res) => {
+  var sql = "SELECT * from e8test.acntmt";
+  var params = [];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+});
+
+app.get("/api/users/getacntmt2", cors(), (req, res) => {
+  var sql = "SELECT * from e8test.acntmt";
+  var params = [];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+});
+
 app.get("/api/hello", cors(), (req, res) => {
   res.send("gd");
 });

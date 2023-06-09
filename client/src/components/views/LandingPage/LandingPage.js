@@ -9,6 +9,8 @@ import NavBar from "../NavBar/NavBar";
 import mgrid from "./mainGrid";
 import "./middleGrid.css";
 import "./topGrid.css";
+import $ from "jquery";
+//import wijmo from "@grapecity/wijmo.react.grid";
 
 <script src="../../../scripts/vendor/controls/wijmo.min.js"></script>;
 <script src="../../../scripts/vendor/controls/wijmo.grid.min.js"></script>;
@@ -226,93 +228,97 @@ function LandingPage(props) {
                   <div style={rightTopButtonstyle}>1page</div>
                 </Col>
               </Row> */}
-              <div class="topGrid">
-                <div class="div1 mg tg">test </div>
-                <div class="div2 mg tg">test </div>
-                <div class="div3 mg tg">test </div>
-                <div class="div4 mg tg">test </div>
-                <div class="div5 mg tg">test </div>
-                <div class="div6 mg tg">test </div>
-                <div class="div7 mg tg">test </div>
-                <div class="div8 mg tg">test </div>
-                <div class="div9 mg tg">test </div>
-                <div class="div10 mg tg">test </div>
-                <div class="div11 mg tg">test </div>
-                <div class="div12 mg tg">test </div>
-                <div class="div13 mg tg">test </div>
-                <div class="div14 mg tg">test </div>
-                <div class="div15 mg tg">test </div>
-                <div class="div16 mg tg">test </div>
-                <div class="div17 mg tg">test </div>
-                <div class="div18 mg tg">test </div>
-                <div class="div19 mg tg">test </div>
-                <div class="div20 mg tg">test </div>
-                <div class="div21 mg tg">test </div>
-                <div class="div22 mg tg">test </div>
-                <div class="div23 mg tg">test </div>
-                <div class="div24 mg tg">test </div>
-                <div class="div25 mg tg">test </div>
+              <div className="topGrid">
+                <div className="div1 mg tg">test </div>
+                <div className="div2 mg tg">test </div>
+                <div className="div3 mg tg">test </div>
+                <div className="div4 mg tg">test </div>
+                <div className="div5 mg tg">test </div>
+                <div className="div6 mg tg">test </div>
+                <div className="div7 mg tg">test </div>
+                <div className="div8 mg tg">test </div>
+                <div className="div9 mg tg">test </div>
+                <div className="div10 mg tg">test </div>
+                <div className="div11 mg tg">test </div>
+                <div className="div12 mg tg">test </div>
+                <div className="div13 mg tg">test </div>
+                <div className="div14 mg tg">test </div>
+                <div className="div15 mg tg">test </div>
+                <div className="div16 mg tg">test </div>
+                <div className="div17 mg tg">test </div>
+                <div className="div18 mg tg">test </div>
+                <div className="div19 mg tg">test </div>
+                <div className="div20 mg tg">test </div>
+                <div className="div21 mg tg">test </div>
+                <div className="div22 mg tg">test </div>
+                <div className="div23 mg tg">test </div>
+                <div className="div24 mg tg">test </div>
+                <div className="div25 mg tg">test </div>
               </div>
               <br></br>
-              <div class="middleGrid">
-                <div class="div1 mg">test </div>
-                <div class="div2 mg">test </div>
-                <div class="div3 mg">test </div>
-                <div class="div4 mg">test </div>
-                <div class="div5 mg">test </div>
-                <div class="div6 mg">test </div>
-                <div class="div7 mg">test </div>
-                <div class="div8 mg">test </div>
-                <div class="div9 mg">test </div>
-                <div class="div10 mg">test </div>
-                <div class="div11 mg">test </div>
-                <div class="div12 mg">test </div>
-                <div class="div13 mg">test </div>
-                <div class="div14 mg">test </div>
-                <div class="div15 mg">test </div>
-                <div class="div16 mg">test </div>
-                <div class="div17 mg">test </div>
-                <div class="div18 mg">test </div>
-                <div class="div19 mg">test </div>
-                <div class="div20 mg">test </div>
-                <div class="div21 mg">test </div>
-                <div class="div22 mg">test </div>
-                <div class="div23 mg">test </div>
-                <div class="div24 mg">test </div>
-                <div class="div25 mg">test </div>
-                <div class="div26 mg">test </div>
-                <div class="div27 mg">test </div>
-                <div class="div28 mg">test </div>
-                <div class="div29 mg">test </div>
-                <div class="div30 mg">1page </div>
+              <div className="middleGrid">
+                <div className="div1 mg">test </div>
+                <div className="div2 mg">test </div>
+                <div className="div3 mg">test </div>
+                <div className="div4 mg">test </div>
+                <div className="div5 mg">test </div>
+                <div className="div6 mg">test </div>
+                <div className="div7 mg">test </div>
+                <div className="div8 mg">test </div>
+                <div className="div9 mg">test </div>
+                <div className="div10 mg">test </div>
+                <div className="div11 mg">test </div>
+                <div className="div12 mg">test </div>
+                <div className="div13 mg">test </div>
+                <div className="div14 mg">test </div>
+                <div className="div15 mg">test </div>
+                <div className="div16 mg">test </div>
+                <div className="div17 mg">test </div>
+                <div className="div18 mg">test </div>
+                <div className="div19 mg">test </div>
+                <div className="div20 mg">test </div>
+                <div className="div21 mg">test </div>
+                <div className="div22 mg">test </div>
+                <div className="div23 mg">test </div>
+                <div className="div24 mg">test </div>
+                <div className="div25 mg">test </div>
+                <div className="div26 mg">test </div>
+                <div className="div27 mg">test </div>
+                <div className="div28 mg">test </div>
+                <div className="div29 mg">test </div>
+                <div className="div30 mg">1page </div>
               </div>
               <br></br>
-              <div class="topGrid">
-                <div class="div1 mg bg">test </div>
-                <div class="div2 mg bg">test </div>
-                <div class="div3 mg bg">test </div>
-                <div class="div4 mg bg">test </div>
-                <div class="div5 mg bg">test </div>
-                <div class="div6 mg bg">test </div>
-                <div class="div7 mg bg">test </div>
-                <div class="div8 mg bg">test </div>
-                <div class="div9 mg bg">test </div>
-                <div class="div10 mg bg">test </div>
-                <div class="div11 mg bg">test </div>
-                <div class="div12 mg bg">test </div>
-                <div class="div13 mg bg">test </div>
-                <div class="div14 mg bg">test </div>
-                <div class="div15 mg bg">test </div>
-                <div class="div16 mg bg">test </div>
-                <div class="div17 mg bg">test </div>
-                <div class="div18 mg bg">test </div>
-                <div class="div19 mg bg">test </div>
-                <div class="div20 mg bg">test </div>
-                <div class="div21 mg bg">test </div>
-                <div class="div22 mg bg">test </div>
-                <div class="div23 mg bg">test </div>
-                <div class="div24 mg bg">test </div>
-                <div class="div25 mg bg">test </div>
+              <div className="topGrid">
+                <div className="div1 mg bg">test </div>
+                <div className="div2 mg bg">test </div>
+                <div className="div3 mg bg">test </div>
+                <div className="div4 mg bg">test </div>
+                <div className="div5 mg bg">test </div>
+                <div className="div6 mg bg">test </div>
+                <div className="div7 mg bg">test </div>
+                <div className="div8 mg bg">test </div>
+                <div className="div9 mg bg">test </div>
+                <div className="div10 mg bg">test </div>
+                <div className="div11 mg bg">test </div>
+                <div className="div12 mg bg">test </div>
+                <div className="div13 mg bg">test </div>
+                <div className="div14 mg bg">test </div>
+                <div className="div15 mg bg">test </div>
+                <div className="div16 mg bg">test </div>
+                <div className="div17 mg bg">test </div>
+                <div className="div18 mg bg">test </div>
+                <div className="div19 mg bg">test </div>
+                <div className="div20 mg bg">test </div>
+                <div className="div21 mg bg">test </div>
+                <div className="div22 mg bg">test </div>
+                <div className="div23 mg bg">test </div>
+                <div className="div24 mg bg">test </div>
+                <div className="div25 mg bg">test </div>
+              </div>
+
+              <div className="container-fluid">
+                <div id="theGrid"> </div>
               </div>
             </div>
           </Content>
