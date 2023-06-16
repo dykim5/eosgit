@@ -6,10 +6,15 @@ import { Button, Layout, Menu, theme, Space, Select, Input, Row, Col } from "ant
 import { useState } from "react";
 import logo1 from "../../../img/logo1.png";
 import NavBar from "../NavBar/NavBar";
-import mgrid from "./mainGrid";
+import "./mainGrid";
 import "./middleGrid.css";
 import "./topGrid.css";
 import $ from "jquery";
+
+//////////////////////////// 모달
+
+import "./MenuModal/acnt";
+/////////////////////////////모달 끝
 //import wijmo from "@grapecity/wijmo.react.grid";
 
 <script src="../../../scripts/vendor/controls/wijmo.min.js"></script>;
@@ -290,7 +295,10 @@ function LandingPage(props) {
               </div>
               <br></br>
               <div className="topGrid">
-                <div className="div1 mg bg">test </div>
+                <div className="div1 mg bg" id="acnt">
+                  F1 입출금{" "}
+                </div>
+
                 <div className="div2 mg bg">test </div>
                 <div className="div3 mg bg">test </div>
                 <div className="div4 mg bg">test </div>

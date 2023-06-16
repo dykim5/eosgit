@@ -118,22 +118,25 @@ class MainGrid extends React.Component {
     );
   }
   initializeGrid(flex) {
+    var setData = this;
     var data2 = [];
     axios
       .get("/api/users/getacntmt2")
       .then(function (response) {
         // 성공 핸들링
-
         for (var i = 0; i < 5; i++) {
           data2.push({
-            id: response.data.success[i].AcntID,
-            country: response.data.success[i].AcntID,
-            sales: response.data.success[i].AcntID,
-            expenses: response.data.success[i].AcntID,
+            AcntID: response.data.success[i].AcntID,
+            AcntName: response.data.success[i].AcntName,
+            Initial: response.data.success[i].Initial,
+            IsSleep: response.data.success[i].IsSleep,
           });
           console.log(response.data.success[i]);
         }
+
+        setData.setState({ data: data2 });
       })
+
       .catch(function (error) {
         // 에러 핸들링
         console.log(error);
@@ -141,6 +144,8 @@ class MainGrid extends React.Component {
       .finally(function () {
         // 항상 실행되는 영역
       });
+
+    console.log(data2);
 
     var url = "https://services.odata.org/Northwind/Northwind.svc";
     //var url = "/api/users/getacntmt2";
@@ -156,6 +161,8 @@ class MainGrid extends React.Component {
       //data: data2,
     });
   }
+
+  ///////////////////////////////////////////////////////
 }
 setTimeout(() => {
   const container = document.getElementById("mainGrid");
