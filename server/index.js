@@ -213,6 +213,32 @@ app.get("/api/hello", cors(), (req, res) => {
   res.send("gd");
 });
 
+app.post("/api/users/getacnttd", cors(), (req, res) => {
+  var sql = "SELECT * from e8test.acnttd";
+  var params = [];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+});
+
+app.post("/api/users/getacnttdSearch", cors(), (req, res) => {
+  var body = req.body;
+  console.log(req.body);
+  var sql = "SELECT * from e8test.acnttd WHERE TdDate = ? ";
+  var params = [body.dateVal];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+});
+
 ////////////////////////////////////////////////////////////////////////////////
 
 app.post("/api/users/regist", async (req, res) => {

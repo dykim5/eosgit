@@ -1,3 +1,23 @@
 .ant-modal {
   width: 70% !important;
 }
+
+.wj-flexgrid {
+  height: 550px;
+  width: 100%;
+}
+
+.modal-content {
+  width: 450px;
+}
+
+.antpop {
+  /* height: 50%; */
+  z-index: 1500 !important;
+  position: relative;
+}
+
+.ant-dropdown-open {
+  z-index: 1600 !important;
+  position: relative !important;
+}

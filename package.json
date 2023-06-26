@@ -126,6 +126,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
+    "react-hotkeys-hook": "^4.4.0",
     "regenerate": "^1.4.2",
     "regenerate-unicode-properties": "^10.1.0",
     "regenerator-runtime": "^0.13.11",
