@@ -14,12 +14,15 @@ import $ from "jquery";
 //////////////////////////// 모달
 
 import "./MenuModal/acnt";
+import "./MenuModal/acntGrid";
 /////////////////////////////모달 끝
 //import wijmo from "@grapecity/wijmo.react.grid";
 
-<script src="../../../scripts/vendor/controls/wijmo.min.js"></script>;
+{
+  /* <script src="../../../scripts/vendor/controls/wijmo.min.js"></script>;
 <script src="../../../scripts/vendor/controls/wijmo.grid.min.js"></script>;
-<script src="../../../scripts/vendor/controls/cultures/wijmo.culture.ko.min.js"></script>;
+<script src="../../../scripts/vendor/controls/cultures/wijmo.culture.ko.min.js"></script>; */
+}
 
 const { Header, Sider, Content } = Layout;
 const { Option } = Select;

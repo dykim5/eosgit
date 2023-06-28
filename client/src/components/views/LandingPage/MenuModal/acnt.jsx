@@ -6,7 +6,7 @@ import * as ReactDOM from "react-dom/client";
 import "./acntGrid.css";
 import { useHotkeys } from "react-hotkeys-hook";
 import dayjs from "dayjs";
-import "./acntGrid";
+import AcntGrid from "./acntGrid";
 const Acnt = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -78,41 +78,44 @@ const Acnt = () => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
-        footer={[
-          <Button key="1" onClick={fnCreate} style={{ float: "left" }}>
-            추가(F2)
-          </Button>,
-          <Button key="2" onClick={fnUpdate} style={{ float: "left" }}>
-            수정(F3)
-          </Button>,
-          <Button key="3" onClick={fnDelete} style={{ float: "left" }}>
-            삭제(del)
-          </Button>,
-          <Button key="4" onClick={fnManage} style={{ float: "left" }}>
-            계정과목관리
-          </Button>,
-          <Button key="5" onClick={handleCancel}>
-            닫기
-          </Button>,
-        ]}
+        footer={
+          [
+            // <Button key="1" onClick={fnCreate} style={{ float: "left" }}>
+            //   추가(F2)
+            // </Button>,
+            // <Button key="2" onClick={fnUpdate} style={{ float: "left" }}>
+            //   수정(F3)
+            // </Button>,
+            // <Button key="3" onClick={fnDelete} style={{ float: "left" }}>
+            //   삭제(del)
+            // </Button>,
+            // <Button key="4" onClick={fnManage} style={{ float: "left" }}>
+            //   계정과목관리
+            // </Button>,
+            // <Button key="5" onClick={handleCancel}>
+            //   닫기
+            // </Button>,
+          ]
+        }
       >
         <br></br>
         <br></br>
-        <div
-          id="acntGrid"
-          className="acntGrid"
-          // style={{ width: "650px" }}
-        ></div>
+        {/* <div id="acntGrid"></div> */}
+        <AcntGrid />
       </Modal>
     </>
   );
 };
+
 setTimeout(() => {
   const container = document.getElementById("acnt");
   if (container) {
     const root = ReactDOM.createRoot(container);
     root.render(<Acnt />);
+    //root.render(<acntGrid />);
   }
-}, 250);
+}, 300);
 
-export default Acnt;
+//ReactDOM.render(<Acnt />, document.getElementById("acnt"));
+
+//export default Acnt;

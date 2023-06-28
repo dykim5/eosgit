@@ -131,7 +131,6 @@ class MainGrid extends React.Component {
             Initial: response.data.success[i].Initial,
             IsSleep: response.data.success[i].IsSleep,
           });
-          console.log(response.data.success[i]);
         }
 
         setData.setState({ data: data2 });
@@ -145,11 +144,9 @@ class MainGrid extends React.Component {
         // 항상 실행되는 영역
       });
 
-    console.log(data2);
-
     var url = "https://services.odata.org/Northwind/Northwind.svc";
     //var url = "/api/users/getacntmt2";
-    console.log("이미 그림");
+
     var view = new ODataCollectionView(url, "Customers", {
       pageSize: 6,
       pageOnServer: true,
@@ -170,4 +167,4 @@ setTimeout(() => {
     const root = ReactDOM.createRoot(container);
     root.render(<MainGrid />);
   }
-}, 100);
+}, 10);

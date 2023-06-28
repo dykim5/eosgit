@@ -227,9 +227,38 @@ app.post("/api/users/getacnttd", cors(), (req, res) => {
 
 app.post("/api/users/getacnttdSearch", cors(), (req, res) => {
   var body = req.body;
-  console.log(req.body);
   var sql = "SELECT * from e8test.acnttd WHERE TdDate = ? ";
   var params = [body.dateVal];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+});
+
+// 입출금 acnttd 삭제
+
+app.post("/api/users/deleteAcnttd", cors(), (req, res) => {
+  var body = req.body;
+  var sql = "DELETE from e8test.acnttd WHERE TdID = ? ";
+  var params = [body.data];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+});
+
+//입출금 추가
+app.post("/api/users/insertacnttd", cors(), (req, res) => {
+  var body = req.body.data;
+  var sql = "insert  into e8test.acnttd (acntid,acntname,inmny,outmny, TdDate,TdTime) value( ?,?,?,?,(select date_format(sysdate(), '%Y-%m-%d')),(select date_format(sysdate(), '%Y-%m-%d %H:%i:%s')) )";
+  var params = [body.AcntID, body.AcntName, body.InMny, body.OutMny, body.Descr];
+
   connection.query(sql, params, function (err, rows, fields) {
     if (err) console.log(" 실패 \n" + err);
     else
