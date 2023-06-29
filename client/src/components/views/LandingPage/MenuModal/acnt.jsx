@@ -59,14 +59,14 @@ const Acnt = () => {
   //   console.log(dateVal);
   // };
 
-  const fnCreate = () => {
-    alert(1);
-  };
-  const fnUpdate = () => {};
+  // const fnCreate = () => {
+  //   alert(1);
+  // };
+  // const fnUpdate = () => {};
 
-  const fnDelete = () => {};
+  // const fnDelete = () => {};
 
-  const fnManage = () => {};
+  // const fnManage = () => {};
 
   return (
     <>
