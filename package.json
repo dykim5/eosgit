@@ -109,6 +109,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.2.4",
     "node-environment-flags": "^1.0.6",
+    "node-escpos-win": "^1.0.15",
     "node-releases": "^2.0.10",
     "object-inspect": "^1.12.3",
     "object-keys": "^1.1.1",

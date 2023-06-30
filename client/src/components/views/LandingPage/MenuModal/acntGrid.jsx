@@ -20,7 +20,9 @@ import keypadimg from "../../../../img/keypad.PNG";
 import $ from "jquery";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
-import { faListCheck, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { faListCheck, faPowerOff, faCopy } from "@fortawesome/free-solid-svg-icons";
+//import { faPrint } from "@fortawesome/free-solid-svg-icons";
+
 var nowDate = dayjs();
 var dateVal = nowDate.format("YYYY-MM-DD");
 
@@ -68,7 +70,7 @@ class AcntGrid extends React.Component {
         <br></br>
         <br></br>
         <div className="container-fluid">
-          <wjcGrid.FlexGrid initialized={this.initializeGrid.bind(this)} itemsSource={this.state.data} allowAddNew={true} allowDelete={true} newRowAtTo={this.state.newRowAtTop}>
+          <wjcGrid.FlexGrid id="grid" initialized={this.initializeGrid.bind(this)} itemsSource={this.state.data} allowAddNew={true} allowDelete={true} newRowAtTo={this.state.newRowAtTop}>
             <wjcGrid.FlexGridColumn binding="TdID" header="TdID" isReadOnly={true} />
             <wjcGrid.FlexGridColumn binding="거래일자" header="거래일자" isReadOnly={true} />
             <wjcGrid.FlexGridColumn binding="거래시간" header="거래시간" isReadOnly={true} />
@@ -99,9 +101,13 @@ class AcntGrid extends React.Component {
           <FontAwesomeIcon icon={faListCheck} />
           계정과목관리
         </Button>
-        <Button key="5" style={{ float: "right" }}>
+        <Button key="6" style={{ float: "right" }}>
           {/* <FontAwesomeIcon icon={faPowerOff} /> */}
           닫기(ESC )
+        </Button>
+        <Button key="5" style={{ float: "right" }}>
+          <FontAwesomeIcon icon={faCopy} />
+          인쇄(F10)
         </Button>
 
         <wjInput.Popup className="modal-content" initialized={this.initPopup.bind(this)}>
@@ -176,23 +182,19 @@ class AcntGrid extends React.Component {
   }
 
   onAdd = (flex) => {
-    let view = flex.collectionView;
-    this.popup2.show(true, (sender) => {
-      // delete the row
-      if (sender.dialogResult === "wj-hide-ok") {
-      }
-      // return focus to the gr
-    });
+    $("#grid").focus();
+    document.getElementById("grid").focus();
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
   };
 
   onDelete = (flex) => {
-    let view = flex.collectionView;
-    this.popup.show(true, (sender) => {
-      // delete the row
-      if (sender.dialogResult === "wj-hide-ok") {
-      }
-      // return focus to the gr
-    });
+    // let view = flex.collectionView;
+    // this.popup.show(true, (sender) => {
+    //   // delete the row
+    //   if (sender.dialogResult === "wj-hide-ok") {
+    //   }
+    //   // return focus to the gr
+    // });
   };
 
   onInMnyChanged(evt) {
@@ -277,6 +279,7 @@ class AcntGrid extends React.Component {
       "keydown",
       (e) => {
         let view = flex.collectionView;
+        //console.log(view);
         // looking for ctrl+Delete
         //if (e.ctrlKey && e.keyCode == wjcCore.Key.Delete && view.currentItem) {
         var reload = this;
@@ -313,7 +316,9 @@ class AcntGrid extends React.Component {
           });
         }
         //추가
-        else if (e.keyCode === wjcCore.Key.F2 && view.currentItem) {
+        else if (e.keyCode == wjcCore.Key.F2) {
+          //else if (e.keyCode === wjcCore.Key.F2 && view.currentItem) {
+          //else if (e.keyCode === 69 && view.currentItem) {
           // prevent the grid from getting the key
           e.preventDefault();
           // confirm row deletion

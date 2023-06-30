@@ -36,6 +36,24 @@ const rightTopButtonstyle = {
 };
 
 const onclickHandler = () => {
+  console.log("logout");
+  //document.dispatchEvent(new KeyboardEvent("keypress", "F1"));
+
+  // document.addEventListener("keydown", function (e) {
+  //   const keyCode = e.keyCode;
+  //   console.log("pushed key " + e.key);
+
+  //   if (keyCode == 13) {
+  //     // Enter key
+  //     document.dispatchEvent(new KeyboardEvent("keydown", { key: "F1" }));
+  //     // document.dispatchEvent(new KeyboardEvent('keyup', {key: 'e'}));
+  //   } else if (keyCode == 9) {
+  //     // Tab key
+  //     document.dispatchEvent(new KeyboardEvent("keydown", { key: "t" }));
+  //     // document.dispatchEvent(new KeyboardEvent('keyup', {key: 't'}));
+  //   }
+  // });
+
   axios.get("/api/users/logout").then((response) => {
     console.log(response.data);
     if (response.data.success) {

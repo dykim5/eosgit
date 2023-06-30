@@ -269,6 +269,66 @@ app.post("/api/users/insertacnttd", cors(), (req, res) => {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////        프린터  //////////////////////////////////////
+
+// ("use strict");
+const path = require("path");
+const escpos = require("escpos");
+escpos.USB = require("escpos-usb");
+const escpos2 = require("node-escpos-win");
+const usb = escpos2.GetDeviceList("USB");
+const device2 = usb.list.find((item) => item.service === "usbprint" || item.name === "USB 인쇄지원");
+//var http = require("http").Server(app);
+app.use(cors());
+app.use(bodyParser.json());
+escpos.USB = require("escpos-usb");
+console.log("프린터목록");
+console.log(escpos.USB.findPrinter());
+console.log(device2);
+const device = new escpos.USB(1208, 514); //epson 5
+const options = { encoding: "euc-kr" /* default */ };
+const printer = new escpos.Printer(device, options);
+app.post("/api/print", (req, res) => {
+  res.json({ status: "success" });
+  console.log(req.body);
+  print(req.body.text);
+});
+
+const print = (text) => {
+  device.open(function () {
+    printer
+      .font("a")
+      .align("ct")
+      .style("bu")
+      .size(1, 1)
+      .text(text)
+      .text(" 줄 바꿈 테스트 ")
+      .table(["테이블1, 테이블2, 테이블3"])
+      .cut()
+      .text(" 줄 바꿈 테스트 ")
+      .table(["테이블1, 테이블2, 테이블3"])
+      .text(" 줄 바꿈 테스트 ")
+      .table(["테이블1, 테이블2, 테이블3"])
+      .cut()
+      .tableCustom(
+        [
+          { text: "Left", align: "LEFT", width: 0.33, style: "B" },
+          { text: "Center", align: "CENTER", width: 0.33 },
+          { text: "Right", align: "RIGHT", width: 0.33 },
+        ],
+        { encoding: "cp857", size: [1, 1] } // Optional
+      )
+      .qrimage("https://github.com/song940/node-escpos", function (err) {
+        this.cut();
+        this.close();
+      });
+    //.close();
+  });
+};
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 app.post("/api/users/regist", async (req, res) => {
   var body = req.body;
