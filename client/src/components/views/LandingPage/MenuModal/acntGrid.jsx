@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 //import "../../../styles/wijmo.css";
 import "./acntGrid.css";
 //import * as React from "react";
-import React, { useState } from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import * as ReactDOM from "react-dom/client";
 // import { ODataCollectionView } from "@grapecity/wijmo.odata";
 // import { CollectionViewNavigator } from "@grapecity/wijmo.react.input";
@@ -38,14 +38,18 @@ var Descr = null;
 var AcntID = null;
 
 function DataControl() {
-  const [value, setValue] = useState(0);
-
-  const onInMnyHandler = (event) => {
-    setValue(event.currentTarget.value);
-  };
+  // inputRef = useRef < HTMLInputElement > null;
+  // //const [value, setValue] = useState(0);
+  // useLayoutEffect(() => {
+  //   if (inputRef.current !== null) inputRef.current.focus();
+  // });
+  // const onInMnyHandler = (event) => {
+  //   setValue(event.currentTarget.value);
+  // };
 }
 
 class AcntGrid extends React.Component {
+  inputRef;
   constructor(props) {
     super(props);
     this.state = {
@@ -70,10 +74,18 @@ class AcntGrid extends React.Component {
         <br></br>
         <br></br>
         <div className="container-fluid">
-          <wjcGrid.FlexGrid id="grid" initialized={this.initializeGrid.bind(this)} itemsSource={this.state.data} allowAddNew={true} allowDelete={true} newRowAtTo={this.state.newRowAtTop}>
-            <wjcGrid.FlexGridColumn binding="TdID" header="TdID" isReadOnly={true} />
+          <wjcGrid.FlexGrid id="agrid" initialized={this.initializeGrid.bind(this)} itemsSource={this.state.data} allowAddNew={true} allowDelete={true} newRowAtTo={this.state.newRowAtTop}>
+            <wjcGrid.FlexGridColumn
+              binding="TdID"
+              header="TdID"
+              autofocus
+              id="fid"
+              ref={(c) => {
+                this.inputRef = c;
+              }}
+            />
             <wjcGrid.FlexGridColumn binding="거래일자" header="거래일자" isReadOnly={true} />
-            <wjcGrid.FlexGridColumn binding="거래시간" header="거래시간" isReadOnly={true} />
+            {/* <wjcGrid.FlexGridColumn binding="거래시간" header="거래시간" isReadOnly={true} /> */}
             <wjcGrid.FlexGridColumn binding="과목ID" header="과목ID" isReadOnly={true} />
             <wjcGrid.FlexGridColumn binding="과목명" header="과목명" isReadOnly={true} />
             <wjcGrid.FlexGridColumn binding="입금금액" header="입금금액" isReadOnly={true} />
@@ -182,9 +194,15 @@ class AcntGrid extends React.Component {
   }
 
   onAdd = (flex) => {
-    $("#grid").focus();
-    document.getElementById("grid").focus();
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
+    var div = document.getElementById("agrid");
+    div.className += " wj-state-focus";
+    div.className += " wj-state-focused";
+    console.log("s1");
+
+    setTimeout(() => {
+      console.log("s2");
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
+    }, 100);
   };
 
   onDelete = (flex) => {
@@ -228,7 +246,7 @@ class AcntGrid extends React.Component {
             과목ID: response.data.success[i].AcntID,
             과목명: response.data.success[i].AcntName,
             isPrivate: response.data.success[i].isPrivate,
-            입금금액: response.data.success[i].Inmny,
+            입금금액: response.data.success[i].InMny,
             출금금액: response.data.success[i].OutMny,
             사용자ID: response.data.success[i].UserID,
             사용자명: response.data.success[i].UserReal,
@@ -371,6 +389,32 @@ class AcntGrid extends React.Component {
             flex.focus();
           });
         }
+        //출력
+        else if (e.keyCode == wjcCore.Key.F10) {
+          e.preventDefault();
+          var data = new Object();
+          //debugger;
+          data.TdID = view.currentItem.TdID;
+          data.거래일자 = view.currentItem.거래일자;
+          data.과목명 = view.currentItem.과목명;
+          data.비고 = view.currentItem.비고;
+          data.사용자명 = view.currentItem.사용자명;
+          axios
+            .post("/api/print", {
+              data,
+            })
+            .then(function (response) {
+              // 성공 핸들링
+              console.log("성공");
+            })
+            .catch(function (error) {
+              // 에러 핸들링
+              console.log(error);
+            })
+            .finally(function () {
+              // 항상 실행되는 영역
+            });
+        }
       },
       true
     );
@@ -409,7 +453,7 @@ class AcntGrid extends React.Component {
             과목ID: response.data.success[i].AcntID,
             과목명: response.data.success[i].AcntName,
             isPrivate: response.data.success[i].isPrivate,
-            입금금액: response.data.success[i].Inmny,
+            입금금액: response.data.success[i].InMny,
             출금금액: response.data.success[i].OutMny,
             사용자ID: response.data.success[i].UserID,
             사용자명: response.data.success[i].UserReal,

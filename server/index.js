@@ -214,7 +214,7 @@ app.get("/api/hello", cors(), (req, res) => {
 });
 
 app.post("/api/users/getacnttd", cors(), (req, res) => {
-  var sql = "SELECT * from e8test.acnttd";
+  var sql = "SELECT TdID, SiteID, date_add(TdDate, interval 9 hour) AS TdDate ,TdTime,AcntID,AcntName,IsPrivate,InMny,OutMny,UserID,UserReal,Descr from e8test.acnttd";
   var params = [];
   connection.query(sql, params, function (err, rows, fields) {
     if (err) console.log(" 실패 \n" + err);
@@ -222,19 +222,21 @@ app.post("/api/users/getacnttd", cors(), (req, res) => {
       res.status(200).json({
         success: rows,
       });
+    console.log(rows);
   });
 });
 
 app.post("/api/users/getacnttdSearch", cors(), (req, res) => {
   var body = req.body;
-  var sql = "SELECT * from e8test.acnttd WHERE TdDate = ? ";
+  var sql = "SELECT TdID, SiteID, date_add(TdDate, interval 9 hour) AS TdDate ,TdTime,AcntID,AcntName,IsPrivate,InMny,OutMny,UserID,UserReal,Descr from e8test.acnttd WHERE TdDate = ? ";
   var params = [body.dateVal];
   connection.query(sql, params, function (err, rows, fields) {
-    if (err) console.log(" 실패 \n" + err);
+    if (err) console.log("실패 \n" + err);
     else
       res.status(200).json({
         success: rows,
       });
+    console.log(rows);
   });
 });
 
@@ -256,7 +258,7 @@ app.post("/api/users/deleteAcnttd", cors(), (req, res) => {
 //입출금 추가
 app.post("/api/users/insertacnttd", cors(), (req, res) => {
   var body = req.body.data;
-  var sql = "insert  into e8test.acnttd (acntid,acntname,inmny,outmny, TdDate,TdTime) value( ?,?,?,?,(select date_format(sysdate(), '%Y-%m-%d')),(select date_format(sysdate(), '%Y-%m-%d %H:%i:%s')) )";
+  var sql = "insert  into e8test.acnttd (acntid,acntname,inmny,outmny,Descr, TdDate, TdTime) value( ?,?,?,?,?,(select date_format(sysdate(), '%Y-%m-%d')),(select date_format(sysdate(), '%Y-%m-%d %H:%i:%s')) )";
   var params = [body.AcntID, body.AcntName, body.InMny, body.OutMny, body.Descr];
 
   connection.query(sql, params, function (err, rows, fields) {
@@ -283,16 +285,16 @@ const device2 = usb.list.find((item) => item.service === "usbprint" || item.name
 app.use(cors());
 app.use(bodyParser.json());
 escpos.USB = require("escpos-usb");
-console.log("프린터목록");
-console.log(escpos.USB.findPrinter());
-console.log(device2);
+// console.log("프린터목록");
+// console.log(escpos.USB.findPrinter());
+// console.log(device2);
 const device = new escpos.USB(1208, 514); //epson 5
 const options = { encoding: "euc-kr" /* default */ };
 const printer = new escpos.Printer(device, options);
 app.post("/api/print", (req, res) => {
   res.json({ status: "success" });
-  console.log(req.body);
-  print(req.body.text);
+  console.log(req.body.data);
+  print(req.body.data);
 });
 
 const print = (text) => {
@@ -302,15 +304,14 @@ const print = (text) => {
       .align("ct")
       .style("bu")
       .size(1, 1)
-      .text(text)
-      .text(" 줄 바꿈 테스트 ")
-      .table(["테이블1, 테이블2, 테이블3"])
-      .cut()
-      .text(" 줄 바꿈 테스트 ")
-      .table(["테이블1, 테이블2, 테이블3"])
-      .text(" 줄 바꿈 테스트 ")
-      .table(["테이블1, 테이블2, 테이블3"])
-      .cut()
+      .text("번호 : " + text.TdID)
+      .text("거래일자 : " + text.거래일자)
+      //.cut()
+      .text("과목명 : " + text.과목명)
+      .text("비고 : " + text.비고)
+      .text("사용자명 : " + text.사용자명)
+      //.table(["테이블1, 테이블2, 테이블3"])
+      //.cut()
       .tableCustom(
         [
           { text: "Left", align: "LEFT", width: 0.33, style: "B" },

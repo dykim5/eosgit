@@ -37,7 +37,7 @@ const rightTopButtonstyle = {
 
 const onclickHandler = () => {
   console.log("logout");
-  //document.dispatchEvent(new KeyboardEvent("keypress", "F1"));
+  //document.dispatchEvent(new KeyboardEvent("keydown", { key: "F1" }));
 
   // document.addEventListener("keydown", function (e) {
   //   const keyCode = e.keyCode;
