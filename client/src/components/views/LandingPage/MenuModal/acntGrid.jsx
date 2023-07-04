@@ -22,6 +22,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faListCheck, faPowerOff, faCopy } from "@fortawesome/free-solid-svg-icons";
 //import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import { render } from "react-thermal-printer";
+import UserReceipt from "./UserReceipt";
+//import TPrinter from "./testp";
 
 var nowDate = dayjs();
 var dateVal = nowDate.format("YYYY-MM-DD");
@@ -47,6 +50,174 @@ function DataControl() {
   //   setValue(event.currentTarget.value);
   // };
 }
+
+// const escpos = require("escpos");
+// escpos.USB = require("escpos-usb");
+// const escpos2 = require("node-escpos-win");
+// const usb = escpos2.GetDeviceList("USB");
+// const device2 = usb.list.find((item) => item.service === "usbprint" || item.name === "USB 인쇄지원");
+// escpos.USB = require("escpos-usb");
+// const device = new escpos.USB(1208, 514); //epson 5
+// const options = { encoding: "euc-kr" /* default */ };
+// const printer = new escpos.Printer(device, options);
+// const print = () => {
+//   device.open(function () {
+//     printer
+//       .font("a")
+//       .align("ct")
+//       .style("bu")
+//       .size(1, 1)
+//       .text("번호 :")
+//       // .text("번호 : " + text.TdID)
+//       // .text("거래일자 : " + text.거래일자)
+//       // //.cut()
+//       // .text("과목명 : " + text.과목명)
+//       // .text("비고 : " + text.비고)
+//       // .text("사용자명 : " + text.사용자명)
+//       //.table(["테이블1, 테이블2, 테이블3"])
+//       //.cut()
+//       .tableCustom(
+//         [
+//           { text: "Left", align: "LEFT", width: 0.33, style: "B" },
+//           { text: "Center", align: "CENTER", width: 0.33 },
+//           { text: "Right", align: "RIGHT", width: 0.33 },
+//         ],
+//         { encoding: "cp857", size: [1, 1] } // Optional
+//       )
+//       .qrimage("https://github.com/song940/node-escpos", function (err) {
+//         this.cut();
+//         this.close();
+//       });
+//     //.close();
+//   });
+// };
+//const SerialPort = require("serialport");
+var device;
+
+function setup(device) {
+  return device
+    .open()
+    .then(() => device.selectConfiguration(1))
+    .then(() => device.claimInterface(0));
+}
+
+function print() {
+  var string = "winusb";
+  var encoder = new TextEncoder();
+  var data = encoder.encode(string);
+  const cmds = [
+    "SIZE 48 mm,25 mm",
+    "CLS",
+    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
+    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
+    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
+    "PRINT 1",
+    "END",
+    "SIZE 48 mm,25 mm",
+    "CLS",
+    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
+    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
+    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
+    "PRINT 1",
+    "END",
+    "SIZE 48 mm,25 mm",
+    "CLS",
+    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
+    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
+    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
+    "PRINT 1",
+    "END",
+    "SIZE 48 mm,25 mm",
+    "CLS",
+    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
+    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
+    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
+    "PRINT 1",
+    "END",
+    "SIZE 48 mm,25 mm",
+    "CLS",
+    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
+    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
+    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
+    "PRINT 1",
+    "END",
+  ];
+  console.log(data);
+  // device.transferOut(2, data).catch((error) => {
+  //   console.log(error);
+  // });
+  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds.join("\r\n"))));
+  //  device.close();
+
+  // device.transferOut(1, 0x0a).catch((error) => {
+  //   console.log(error);
+  // });
+}
+
+async function connectAndPrint() {
+  if (!("usb" in navigator)) {
+    alert("보안 열결이 되어있지 않습니다. HTTPS로 접속하여 주세요.");
+    return;
+  }
+
+  if (device == null) {
+    navigator.usb
+      //.requestDevice({ filters: [{ vendorId: 1208 }] })
+      .requestDevice({ filters: [{}] })
+      .then((selectedDevice) => {
+        device = selectedDevice;
+        return setup(device);
+      })
+      .then(() => print())
+      .catch((error) => {
+        console.log(error);
+      });
+  } else print();
+}
+// navigator.usb.requestDevice({ filters: [] }).then(function (device) {
+//   console.log(device);
+// });
+
+const onClickPrintHandler = async () => {
+  //const data = await render(UserReceipt({ orderinfo }));
+  //const data = await render(UserReceipt({}));
+  //const port = await navigator.serial.requestPort();
+
+  // const port = await navigator.usb.requestDevice({ filters: [] }).then(function (device) {
+  //   console.log(device);
+  //   setup(device);
+  // });
+
+  // navigator.usb
+  //   .requestDevice({ filters: [] })
+  //   .then((devices) => {
+  //     if (devices.length > 0) {
+  //       device = devices[0];
+  //       return setup(device);
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+
+  //const port = "USBSER000";
+  // const port = new SerialPort("COM5", {
+  //   baudRate: 9600,
+  // });
+  if (!("serial" in navigator)) {
+    alert("보안 열결이 되어있지 않습니다. HTTPS로 접속하여 주세요");
+    return;
+  }
+  const port = await navigator.serial.requestPort({});
+  console.log(port);
+  await port.open({ baudRate: 9600 });
+  const writer = port.writable?.getWriter();
+  if (writer !== null) {
+    //await writer.write(data);
+    await writer.releaseLock();
+  }
+  await port.close({ baudRate: 9600 });
+};
 
 class AcntGrid extends React.Component {
   inputRef;
@@ -109,10 +280,10 @@ class AcntGrid extends React.Component {
           <FontAwesomeIcon icon={faTrashCan} />
           삭제(DEL)
         </Button>
-        <Button key="4" onClick={this.onAdd.bind(this)}>
+        {/* <Button key="4" onClick={this.onAdd.bind(this)}>
           <FontAwesomeIcon icon={faListCheck} />
           계정과목관리
-        </Button>
+        </Button> */}
         <Button key="6" style={{ float: "right" }}>
           {/* <FontAwesomeIcon icon={faPowerOff} /> */}
           닫기(ESC )
@@ -121,7 +292,15 @@ class AcntGrid extends React.Component {
           <FontAwesomeIcon icon={faCopy} />
           인쇄(F10)
         </Button>
-
+        <Button
+          onClick={async () => {
+            await onClickPrintHandler();
+          }}
+        >
+          출력(시리얼)
+        </Button>
+        <Button onClick={connectAndPrint}>출력(usb)</Button>
+        {/* <TPrinter /> */}
         <wjInput.Popup className="modal-content" initialized={this.initPopup.bind(this)}>
           <div className="modal-header">데이터 삭제</div>
           <div className="modal-body">해당 데이터를 삭제하시겠습니까?</div>
@@ -132,7 +311,7 @@ class AcntGrid extends React.Component {
         </wjInput.Popup>
 
         <wjInput.Popup className="modal-content antpop" initialized={this.initPopup2.bind(this)}>
-          <div className="modal-header" style={{ background: "red", height: "35px", fontWeight: "bold", fontSize: "large" }}>
+          <div className="modal-header" style={{ height: "35px", fontWeight: "bold", fontSize: "large" }}>
             입출금
           </div>
           <div>
@@ -232,15 +411,50 @@ class AcntGrid extends React.Component {
   initializeGrid(flex) {
     console.log("그리드 불러옴");
     setData = this;
+    // var data2 = [];
+    // axios
+    //   .post("/api/users/getacnttd")
+    //   .then(function (response) {
+    //     // 성공 핸들링
+    //     for (var i = 0; i < response.data.success.length; i++) {
+    //       data2.push({
+    //         TdID: response.data.success[i].TdID,
+    //         //SiteID: response.data.success[i].SiteID,
+    //         거래일자: response.data.success[i].TdDate.substring(0, 10),
+    //         거래시간: response.data.success[i].TdTime.substring(11, 19),
+    //         과목ID: response.data.success[i].AcntID,
+    //         과목명: response.data.success[i].AcntName,
+    //         isPrivate: response.data.success[i].isPrivate,
+    //         입금금액: response.data.success[i].InMny,
+    //         출금금액: response.data.success[i].OutMny,
+    //         사용자ID: response.data.success[i].UserID,
+    //         사용자명: response.data.success[i].UserReal,
+    //         비고: response.data.success[i].Descr,
+    //       });
+    //     }
+
+    //     setData.setState({ data: data2 });
+    //   })
+
+    //   .catch(function (error) {
+    //     // 에러 핸들링
+    //     console.log(error);
+    //   })
+    //   .finally(function () {
+    //     // 항상 실행되는 영역
+    //   });
+
     var data2 = [];
     axios
-      .post("/api/users/getacnttd")
+      .post("/api/users/getacnttdSearch", {
+        dateVal: dateVal,
+      })
       .then(function (response) {
         // 성공 핸들링
         for (var i = 0; i < response.data.success.length; i++) {
           data2.push({
             TdID: response.data.success[i].TdID,
-            //SiteID: response.data.success[i].SiteID,
+            SiteID: response.data.success[i].SiteID,
             거래일자: response.data.success[i].TdDate.substring(0, 10),
             거래시간: response.data.success[i].TdTime.substring(11, 19),
             과목ID: response.data.success[i].AcntID,
@@ -253,10 +467,8 @@ class AcntGrid extends React.Component {
             비고: response.data.success[i].Descr,
           });
         }
-
         setData.setState({ data: data2 });
       })
-
       .catch(function (error) {
         // 에러 핸들링
         console.log(error);
@@ -309,7 +521,7 @@ class AcntGrid extends React.Component {
           this.popup.show(true, (sender) => {
             // delete the row
             if (sender.dialogResult === "wj-hide-ok") {
-              console.log(view.currentItem);
+              //console.log(view.currentItem);
               axios
                 .post("/api/users/deleteAcnttd", {
                   data: view.currentItem.TdID,
