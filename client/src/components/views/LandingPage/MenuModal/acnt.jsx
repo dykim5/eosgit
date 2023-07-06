@@ -48,6 +48,10 @@ const Acnt = () => {
     setOpen(false);
   };
 
+  function mocan() {
+    setOpen(false);
+  }
+
   // var nowDate = dayjs();
   // var dateVal = nowDate.format("YYYY-MM-DD");
 
@@ -101,7 +105,7 @@ const Acnt = () => {
         <br></br>
         <br></br>
         {/* <div id="acntGrid"></div> */}
-        <AcntGrid />
+        <AcntGrid mocan={handleCancel} />
       </Modal>
     </>
   );
@@ -118,4 +122,4 @@ setTimeout(() => {
 
 //ReactDOM.render(<Acnt />, document.getElementById("acnt"));
 
-//export default Acnt;
+export default Acnt;

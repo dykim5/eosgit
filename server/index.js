@@ -904,18 +904,3 @@ https.createServer(options, app).listen(5001, () => {
 app.listen(port, () => {
   console.log(`server is listening at localhost:${process.env.PORT}`);
 });
-
-//const app = module.exports;
-// app.start = function () {
-//   // start the web server
-//   const server = https.createServer(options, app);
-//   return server.listen(port, () => {
-//     app.emit("started");
-//     const baseUrl = app.get("url") + ":" + app.get("port");
-//     console.info("Web server listening at: %s", baseUrl);
-//     if (app.get("loopback-component-explorer")) {
-//       const explorerPath = app.get("loopback-component-explorer").mountPath;
-//       console.info("Browse your REST API at %s%s", baseUrl, explorerPath);
-//     }
-//   });
-// };

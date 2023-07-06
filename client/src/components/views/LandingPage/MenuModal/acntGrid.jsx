@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import * as wjcGrid from "@grapecity/wijmo.react.grid";
 import * as wjcCore from "@grapecity/wijmo";
 import * as wjInput from "@grapecity/wijmo.react.input";
+import * as wjGrid from "@grapecity/wijmo.grid";
 import keypadimg from "../../../../img/keypad.PNG";
 import $ from "jquery";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,63 +36,11 @@ const onChange = (date, dateString) => {
 
 var setData = null;
 var searchData = null;
-var InMny = null;
-var OutMny = null;
-var Descr = null;
-var AcntID = null;
 
-function DataControl() {
-  // inputRef = useRef < HTMLInputElement > null;
-  // //const [value, setValue] = useState(0);
-  // useLayoutEffect(() => {
-  //   if (inputRef.current !== null) inputRef.current.focus();
-  // });
-  // const onInMnyHandler = (event) => {
-  //   setValue(event.currentTarget.value);
-  // };
-}
-
-// const escpos = require("escpos");
-// escpos.USB = require("escpos-usb");
-// const escpos2 = require("node-escpos-win");
-// const usb = escpos2.GetDeviceList("USB");
-// const device2 = usb.list.find((item) => item.service === "usbprint" || item.name === "USB 인쇄지원");
-// escpos.USB = require("escpos-usb");
-// const device = new escpos.USB(1208, 514); //epson 5
-// const options = { encoding: "euc-kr" /* default */ };
-// const printer = new escpos.Printer(device, options);
-// const print = () => {
-//   device.open(function () {
-//     printer
-//       .font("a")
-//       .align("ct")
-//       .style("bu")
-//       .size(1, 1)
-//       .text("번호 :")
-//       // .text("번호 : " + text.TdID)
-//       // .text("거래일자 : " + text.거래일자)
-//       // //.cut()
-//       // .text("과목명 : " + text.과목명)
-//       // .text("비고 : " + text.비고)
-//       // .text("사용자명 : " + text.사용자명)
-//       //.table(["테이블1, 테이블2, 테이블3"])
-//       //.cut()
-//       .tableCustom(
-//         [
-//           { text: "Left", align: "LEFT", width: 0.33, style: "B" },
-//           { text: "Center", align: "CENTER", width: 0.33 },
-//           { text: "Right", align: "RIGHT", width: 0.33 },
-//         ],
-//         { encoding: "cp857", size: [1, 1] } // Optional
-//       )
-//       .qrimage("https://github.com/song940/node-escpos", function (err) {
-//         this.cut();
-//         this.close();
-//       });
-//     //.close();
-//   });
-// };
-//const SerialPort = require("serialport");
+//var InMny = null;
+//var OutMny = null;
+// var Descr = null;
+// var AcntID = null;
 var device;
 
 function setup(device) {
@@ -105,53 +54,10 @@ function print() {
   var string = "winusb";
   var encoder = new TextEncoder();
   var data = encoder.encode(string);
-  const cmds = [
-    "SIZE 48 mm,25 mm",
-    "CLS",
-    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
-    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
-    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
-    "PRINT 1",
-    "END",
-    "SIZE 48 mm,25 mm",
-    "CLS",
-    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
-    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
-    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
-    "PRINT 1",
-    "END",
-    "SIZE 48 mm,25 mm",
-    "CLS",
-    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
-    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
-    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
-    "PRINT 1",
-    "END",
-    "SIZE 48 mm,25 mm",
-    "CLS",
-    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
-    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
-    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
-    "PRINT 1",
-    "END",
-    "SIZE 48 mm,25 mm",
-    "CLS",
-    'TEXT 30,10,"4",0,1,1,"HackerNoon"',
-    'TEXT 30,50,"2",0,1,1,"WebUSB API"',
-    'BARCODE 30,80,"128",70,1,0,2,2,"test"',
-    "PRINT 1",
-    "END",
-  ];
+  const cmds = ["SIZE 48 mm,25 mm", "CLS", 'TEXT 30,10,"4",0,1,1,"HackerNoon"', 'TEXT 30,50,"2",0,1,1,"WebUSB API"', 'BARCODE 30,80,"128",70,1,0,2,2,"test"', "PRINT 1", "END"];
   console.log(data);
-  // device.transferOut(2, data).catch((error) => {
-  //   console.log(error);
-  // });
   device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds.join("\r\n"))));
-  //  device.close();
-
-  // device.transferOut(1, 0x0a).catch((error) => {
-  //   console.log(error);
-  // });
+  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(0x0a)));
 }
 
 async function connectAndPrint() {
@@ -174,10 +80,23 @@ async function connectAndPrint() {
       });
   } else print();
 }
-// navigator.usb.requestDevice({ filters: [] }).then(function (device) {
-//   console.log(device);
-// });
 
+function connectAndPrint2() {
+  alert(1);
+}
+
+function handleCancel2({ handleCancel }) {
+  debugger;
+}
+
+const onAdd2 = async () => {
+  const div = document.getElementById("agrid");
+  div.className += " wj-state-focus";
+  div.className += " wj-state-focused";
+  document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
+};
+
+//시리얼 포트로 프린트
 const onClickPrintHandler = async () => {
   //const data = await render(UserReceipt({ orderinfo }));
   //const data = await render(UserReceipt({}));
@@ -224,12 +143,15 @@ class AcntGrid extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //data: this._getData(100),
-      //data: getData(),
       data: null,
       rowCount: 0,
       cellCount: 0,
       newRowAtTop: false,
+      //입출금모달 폼
+      InMny: 0,
+      OutMny: 0,
+      Descr: "",
+      AcntID: "",
     };
   }
 
@@ -268,11 +190,12 @@ class AcntGrid extends React.Component {
             {/* <wjcGrid.FlexGridColumn binding="isPrivat" header="isPrivat" isReadOnly={true} /> */}
           </wjcGrid.FlexGrid>
         </div>
-        <Button key="1" onClick={this.onAdd.bind(this)}>
+        <Button key="1" id="addBtn" onClick={this.onAdd.bind(this)}>
           <FontAwesomeIcon icon={faSquarePlus} />
           추가(F2)
         </Button>
-        <Button key="2" onClick={this.onAdd.bind(this)}>
+
+        <Button key="2" onClick={onAdd2}>
           <FontAwesomeIcon icon={faPenToSquare} />
           수정(F3)
         </Button>
@@ -284,7 +207,7 @@ class AcntGrid extends React.Component {
           <FontAwesomeIcon icon={faListCheck} />
           계정과목관리
         </Button> */}
-        <Button key="6" style={{ float: "right" }}>
+        <Button key="6" onClick={this.onCloseModal} style={{ float: "right" }}>
           {/* <FontAwesomeIcon icon={faPowerOff} /> */}
           닫기(ESC )
         </Button>
@@ -325,7 +248,7 @@ class AcntGrid extends React.Component {
               <form style={{ margin: "5px" }} id="acntForm"></form>
               <div className="modal-body" st>
                 <label>계정과목 : </label>
-                <select onChange={this.onAcntIDChanged.bind(this)}>
+                <select onChange={this.onAcntIDChanged.bind(this)} value={this.state.AcntID}>
                   <option value=""></option>
                   <option value="1/(일반계정)">(일반계정)</option>
                   <option value="2/지계비">지게비</option>
@@ -342,15 +265,15 @@ class AcntGrid extends React.Component {
                 <br></br>
                 <br></br>
                 <label>입금금액 :</label>
-                <input type="number" step="0.01" pattern="\d*" maxLength={14} min={1} max={99999999999999} onChange={this.onInMnyChanged.bind(this)} />
+                <input type="number" step="0.01" pattern="\d*" maxLength={14} min={1} max={99999999999999} onChange={this.onInMnyChanged.bind(this)} value={this.state.InMny} />
                 <br></br>
                 <br></br>
                 <label>출금금액 :</label>
-                <input onChange={this.onOutMnyChanged.bind(this)} type="number" step="0.01" />
+                <input type="number" step="0.01" onChange={this.onOutMnyChanged.bind(this)} value={this.state.OutMny} />
                 <br></br>
                 <br></br>
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;비 고 : </label>
-                <input onChange={this.onDescrChanged.bind(this)} type="text" maxLength={10} />
+                <input type="text" maxLength={10} onChange={this.onDescrChanged.bind(this)} value={this.state.Descr} />
               </div>
             </div>
             <div
@@ -372,16 +295,65 @@ class AcntGrid extends React.Component {
     );
   }
 
-  onAdd = (flex) => {
-    var div = document.getElementById("agrid");
-    div.className += " wj-state-focus";
-    div.className += " wj-state-focused";
-    console.log("s1");
+  onCloseModal = (e) => {
+    //var than = this;
+    //than.props.mocan();
+    this.props.mocan();
+  };
 
-    setTimeout(() => {
-      console.log("s2");
-      document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
-    }, 100);
+  initialzePopup() {
+    console.log("초기화");
+    this.setState({ InMny: 0, OutMny: 0, Descr: "", AcntID: "" });
+  }
+
+  onAdd = (flex) => {
+    var reload = this;
+    reload.initialzePopup();
+
+    // const div = document.getElementById("agrid");
+    // div.className += " wj-state-focus";
+    // div.className += " wj-state-focused";
+    // document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
+
+    // var t = document.getElementById("addBtn");
+    // t.addEventListener("click", function (event) {
+    //   const div = document.getElementById("agrid");
+    //   div.className += " wj-state-focus";
+    //   div.className += " wj-state-focused";
+    //   document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
+    // });
+
+    this.popup2.show(true, (sender) => {
+      if (sender.dialogResult === "wj-hide-ok") {
+        if (this.state.AcntID == null) {
+          alert("과목명을 입력하여 주세요");
+          return;
+        } else {
+          var data = new Object();
+          data.AcntID = this.state.AcntID.split("/")[0];
+          data.AcntName = this.state.AcntID.split("/")[1];
+          data.InMny = this.state.InMny;
+          data.OutMny = this.state.OutMny;
+          data.Descr = this.state.Descr;
+          axios
+            .post("/api/users/insertacnttd", {
+              data,
+            })
+            .then(function (response) {
+              // 성공 핸들링
+              reload._search();
+            })
+            .catch(function (error) {
+              // 에러 핸들링
+              console.log(error);
+            })
+            .finally(function () {
+              // 항상 실행되는 영역
+            });
+        }
+      }
+      // return focus to the gr
+    });
   };
 
   onDelete = (flex) => {
@@ -395,17 +367,22 @@ class AcntGrid extends React.Component {
   };
 
   onInMnyChanged(evt) {
-    InMny = evt.target;
+    this.setState({ InMny: evt.target.value });
+    //debugger;
+
+    //this.state.testval = evt.target;
   }
   onOutMnyChanged(evt) {
-    OutMny = evt.target;
+    //debugger;
+    this.setState({ OutMny: evt.target.value });
+    //OutMny = evt.target;
   }
   onDescrChanged(evt) {
-    Descr = evt.target;
+    this.setState({ Descr: evt.target.value });
   }
 
   onAcntIDChanged(evt) {
-    AcntID = evt.target;
+    this.setState({ AcntID: evt.target.value });
   }
 
   initializeGrid(flex) {
@@ -552,19 +529,19 @@ class AcntGrid extends React.Component {
           // prevent the grid from getting the key
           e.preventDefault();
           // confirm row deletion
-
+          reload.initialzePopup();
           this.popup2.show(true, (sender) => {
             if (sender.dialogResult === "wj-hide-ok") {
-              if (AcntID == null) {
+              if (this.state.AcntID == null) {
                 alert("과목명을 입력하여 주세요");
                 return;
               } else {
                 var data = new Object();
-                data.AcntID = AcntID.value.split("/")[0];
-                data.AcntName = AcntID.value.split("/")[1];
-                data.InMny = InMny.value;
-                data.OutMny = OutMny.value;
-                data.Descr = Descr.value;
+                data.AcntID = this.state.AcntID.split("/")[0];
+                data.AcntName = this.state.AcntID.split("/")[1];
+                data.InMny = this.state.InMny;
+                data.OutMny = this.state.OutMny;
+                data.Descr = this.state.Descr;
                 axios
                   .post("/api/users/insertacnttd", {
                     data,
@@ -580,8 +557,6 @@ class AcntGrid extends React.Component {
                   .finally(function () {
                     // 항상 실행되는 영역
                   });
-                flex.focus();
-                flex.refresh();
               }
             }
             // return focus to the gri
@@ -591,7 +566,8 @@ class AcntGrid extends React.Component {
         else if (e.keyCode === wjcCore.Key.F3 && view.currentItem) {
           // prevent the grid from getting the key
           e.preventDefault();
-          // confirm row deletion
+
+          this.setState({ InMny: view.currentItem.입금금액, OutMny: view.currentItem.출금금액, Descr: view.currentItem.비고, AcntID: view.currentItem.과목ID + "/" + view.currentItem.과목명 });
           this.popup2.show(true, (sender) => {
             // delete the row
             if (sender.dialogResult === "wj-hide-ok") {
@@ -627,6 +603,19 @@ class AcntGrid extends React.Component {
               // 항상 실행되는 영역
             });
         }
+        //usb출력
+        //출력
+        else if (e.keyCode == wjcCore.Key.F9) {
+          e.preventDefault();
+          var data = new Object();
+          //debugger;
+          data.TdID = view.currentItem.TdID;
+          data.거래일자 = view.currentItem.거래일자;
+          data.과목명 = view.currentItem.과목명;
+          data.비고 = view.currentItem.비고;
+          data.사용자명 = view.currentItem.사용자명;
+          connectAndPrint2(data);
+        }
       },
       true
     );
@@ -638,6 +627,11 @@ class AcntGrid extends React.Component {
 
   initPopup2(popup2) {
     this.popup2 = popup2;
+    // console.log("초기화");
+    // InMny = null;
+    // OutMny = null;
+    // Descr = null;
+    // AcntID = null;
   }
   _addData(data, cnt) {
     let more = this._getData(cnt, data.length);
