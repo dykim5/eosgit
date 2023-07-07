@@ -74,8 +74,7 @@ const Acnt = () => {
 
   return (
     <>
-      <div onClick={showModal}>F1 입출금내역</div>
-
+      <div onClick={showModal}>F1 입출금</div>
       <Modal
         title="입출금 내역"
         open={open}

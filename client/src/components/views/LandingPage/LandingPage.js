@@ -5,11 +5,14 @@ import axios from "axios";
 import { Button, Layout, Menu, theme, Space, Select, Input, Row, Col } from "antd";
 import { useState } from "react";
 import logo1 from "../../../img/logo1.png";
+import emptyImg from "../../../img/emptyImg.PNG";
 import NavBar from "../NavBar/NavBar";
 import "./mainGrid";
 import "./middleGrid.css";
 import "./topGrid.css";
 import $ from "jquery";
+import { topData, middleData, bottomData } from "./data2";
+import { getTopMenuData } from "./data";
 
 //////////////////////////// 모달
 
@@ -70,6 +73,7 @@ function LandingPage(props) {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  getTopMenuData();
   return (
     <>
       <NavBar></NavBar>
@@ -152,7 +156,7 @@ function LandingPage(props) {
                 float: "left",
                 boxSizing: "border-box",
                 width: "50%",
-                //height: "100vh",
+                //background : "darkgray"
               }}
             >
               <h2>
@@ -187,7 +191,78 @@ function LandingPage(props) {
 
               <br />
 
-              <div id="mainGrid" style={{ height: "450px" }}></div>
+              <div id="mainGrid" className="wj-flexgrid2"></div>
+              <div style={{ margin: "7px" }}>
+                <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "blue", margin: "7px" }}>
+                  <table>
+                    <tr>
+                      <th style={{ width: "20%" }}>판매소계 :</th>
+                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                      <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;(0)</th>
+                    </tr>
+                  </table>
+                </div>
+                <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "red", margin: "7px" }}>
+                  <table>
+                    <tr>
+                      <th style={{ width: "20%" }}>반품소계 :</th>
+                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                      <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;0%</th>
+                    </tr>
+                  </table>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      float: "left",
+                      boxSizing: "border-box",
+                      width: "58%",
+                      border: "1px solid",
+                      borderRadius: "8px",
+                      //background: "darkgray",
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, fontSize: "large", color: "black", height: "40px", margin: "2px" }}>
+                      <div style={{ float: "left" }}>전잔 :</div>
+                      <div style={{ float: "right" }}>0(0)&nbsp;&nbsp;</div>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: "large", color: "blue", height: "40px", margin: "2px" }}>
+                      <div style={{ float: "left" }}>당일합계 :</div>
+                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: "large", color: "red", height: "40px", margin: "2px" }}>
+                      {" "}
+                      <div style={{ float: "left" }}>입금합계 :</div>
+                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: "large", color: "red", height: "40px", margin: "2px" }}>
+                      {" "}
+                      <div style={{ float: "left" }}>할인금액 :</div>
+                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: "large", color: "black", height: "40px", margin: "2px" }}>
+                      <div style={{ float: "left" }}>당잔 :</div>
+                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      float: "right",
+                      boxSizing: "border-box",
+                      width: "40%",
+                      height: "100%",
+                      border: "1px solid",
+                      margin: "3px",
+                    }}
+                  >
+                    <img src={emptyImg} style={{ width: "100%", height: "100%" }}></img>
+                  </div>
+                </div>
+              </div>
             </div>
             {/* ################################## 세로 템플릿 ######################################### */}
             {/* ################################## 세로 템플릿 ######################################### */}
@@ -207,54 +282,43 @@ function LandingPage(props) {
                 //height: "100vh",
               }}
             >
-              {/* <Row gutter={[1, 1]} style={{ flex: " 0 0 20%" }}>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>test</div>
-                </Col>
-                <Col className="gutter-row" span={5}>
-                  <div style={rightTopButtonstyle}>1page</div>
-                </Col>
-              </Row> */}
-              <div className="topGrid">
+              <table style={{ width: "100%", backgroundColor: "#dde9f2", textAlign: "Center" }}>
+                {topData.map((data, index) => (
+                  <tr data-index={index}>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.a}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.b}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.c}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.d}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.e}</td>
+                  </tr>
+                ))}
+              </table>
+              <br></br>
+
+              <table style={{ width: "100%", backgroundColor: "white", textAlign: "Center" }}>
+                {middleData.map((data, index) => (
+                  <tr data-index={index}>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.a}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.b}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.c}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.d}</td>
+                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.e}</td>
+                  </tr>
+                ))}
+              </table>
+              <br></br>
+              {/* <table style={{ width: "100%", backgroundColor: "#f9efa7", textAlign: "Center" }}>
+                {bottomData.map((data, index) => (
+                  <tr data-index={index}>
+                    <td style={{ width: "20%", height: "70px", border: "4px groove" }}>{data.a}</td>
+                    <td style={{ width: "20%", height: "70px", border: "4px groove" }}>{data.b}</td>
+                    <td style={{ width: "20%", height: "70px", border: "4px groove" }}>{data.c}</td>
+                    <td style={{ width: "20%", height: "70px", border: "4px groove" }}>{data.d}</td>
+                    <td style={{ width: "20%", height: "70px", border: "4px groove" }}>{data.e}</td>
+                  </tr>
+                ))}
+              </table> */}
+              {/* <div className="topGrid">
                 <div className="div1 mg tg">test </div>
                 <div className="div2 mg tg">test </div>
                 <div className="div3 mg tg">test </div>
@@ -315,11 +379,9 @@ function LandingPage(props) {
                 <div className="div30 mg">1page </div>
               </div>
               <br></br>
+              */}
               <div className="topGrid">
-                <div className="div1 mg bg" id="acnt">
-                  F1 입출금{" "}
-                </div>
-
+                <div className="div1 mg bg" id="acnt"></div>
                 <div className="div2 mg bg">test </div>
                 <div className="div3 mg bg">test </div>
                 <div className="div4 mg bg">test </div>
@@ -346,9 +408,9 @@ function LandingPage(props) {
                 <div className="div25 mg bg">test </div>
               </div>
 
-              <div className="container-fluid">
+              {/* <div className="container-fluid">
                 <div id="theGrid"> </div>
-              </div>
+              </div> */}
             </div>
           </Content>
         </Layout>

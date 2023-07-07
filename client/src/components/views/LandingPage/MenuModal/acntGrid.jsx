@@ -50,17 +50,25 @@ function setup(device) {
     .then(() => device.claimInterface(0));
 }
 
-function print() {
-  var string = "winusb";
+function print(data) {
+  var header = "거래전표";
   var encoder = new TextEncoder();
-  var data = encoder.encode(string);
+  var encData = encoder.encode(header);
+
+  console.log(encData);
+
+  const arrayBuffer = new ArrayBuffer(4);
+  const arr = new Uint8Array([190, 200, 179, 231]);
   const cmds = ["SIZE 48 mm,25 mm", "CLS", 'TEXT 30,10,"4",0,1,1,"HackerNoon"', 'TEXT 30,50,"2",0,1,1,"WebUSB API"', 'BARCODE 30,80,"128",70,1,0,2,2,"test"', "PRINT 1", "END"];
-  console.log(data);
+  const cmds2 = ["거래일자 :" + data.거래일자, "비고 : " + data.비고, "과목명 : " + data.과목명];
+  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, arr);
   device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds.join("\r\n"))));
-  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(0x0a)));
+  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds2.join("\r\n"))));
+  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, encData);
+  //device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(0x0a)));
 }
 
-async function connectAndPrint() {
+async function connectAndPrint(data) {
   if (!("usb" in navigator)) {
     alert("보안 열결이 되어있지 않습니다. HTTPS로 접속하여 주세요.");
     return;
@@ -74,19 +82,11 @@ async function connectAndPrint() {
         device = selectedDevice;
         return setup(device);
       })
-      .then(() => print())
+      .then(() => print(data))
       .catch((error) => {
         console.log(error);
       });
-  } else print();
-}
-
-function connectAndPrint2() {
-  alert(1);
-}
-
-function handleCancel2({ handleCancel }) {
-  debugger;
+  } else print(data);
 }
 
 const onAdd2 = async () => {
@@ -246,7 +246,7 @@ class AcntGrid extends React.Component {
               }}
             >
               <form style={{ margin: "5px" }} id="acntForm"></form>
-              <div className="modal-body" st>
+              <div className="modal-body">
                 <label>계정과목 : </label>
                 <select onChange={this.onAcntIDChanged.bind(this)} value={this.state.AcntID}>
                   <option value=""></option>
@@ -571,7 +571,35 @@ class AcntGrid extends React.Component {
           this.popup2.show(true, (sender) => {
             // delete the row
             if (sender.dialogResult === "wj-hide-ok") {
-              view.remove(view.currentItem);
+              if (this.state.AcntID == null) {
+                alert("과목명을 입력하여 주세요");
+                return;
+              } else {
+                debugger;
+
+                var data = new Object();
+                data.TdID = view.currentItem.TdID;
+                data.AcntID = this.state.AcntID.split("/")[0];
+                data.AcntName = this.state.AcntID.split("/")[1];
+                data.InMny = this.state.InMny;
+                data.OutMny = this.state.OutMny;
+                data.Descr = this.state.Descr;
+                axios
+                  .post("/api/users/UpdateAcnttd", {
+                    data,
+                  })
+                  .then(function (response) {
+                    // 성공 핸들링
+                    reload._search();
+                  })
+                  .catch(function (error) {
+                    // 에러 핸들링
+                    console.log(error);
+                  })
+                  .finally(function () {
+                    // 항상 실행되는 영역
+                  });
+              }
             }
             // return focus to the gr
             flex.focus();
@@ -614,7 +642,7 @@ class AcntGrid extends React.Component {
           data.과목명 = view.currentItem.과목명;
           data.비고 = view.currentItem.비고;
           data.사용자명 = view.currentItem.사용자명;
-          connectAndPrint2(data);
+          connectAndPrint(data);
         }
       },
       true

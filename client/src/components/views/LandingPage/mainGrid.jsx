@@ -112,8 +112,15 @@ class MainGrid extends React.Component {
   render() {
     return (
       <div className="container-fluid">
-        <CollectionViewNavigator byPage={true} headerFormat="Page {currentPage:n0} of {pageCount:n0}" cv={this.state.data} />
-        <FlexGrid isReadOnly={true} alternatingRowStep={0} headersVisibility="Column" itemsSource={this.state.data} initialized={this.initializeGrid.bind(this)} />
+        {/* <CollectionViewNavigator byPage={true} headerFormat="Page {currentPage:n0} of {pageCount:n0}" cv={this.state.data} /> */}
+        <FlexGrid isReadOnly={true} alternatingRowStep={0} headersVisibility="Column" itemsSource={this.state.data} initialized={this.initializeGrid.bind(this)}>
+          <wjcGrid.FlexGridColumn binding="품번" header="품번" isReadOnly={true} />
+          <wjcGrid.FlexGridColumn binding="품명" header="품명" isReadOnly={true} />
+          <wjcGrid.FlexGridColumn binding="단가" header="단가" isReadOnly={true} />
+          <wjcGrid.FlexGridColumn binding="수량" header="수량" isReadOnly={true} />
+          <wjcGrid.FlexGridColumn binding="금액" header="금액" isReadOnly={true} />
+          <wjcGrid.FlexGridColumn binding="단가DC" header="단가DC" isReadOnly={true} />
+        </FlexGrid>
       </div>
     );
   }
@@ -124,7 +131,7 @@ class MainGrid extends React.Component {
       .get("/api/users/getacntmt2")
       .then(function (response) {
         // 성공 핸들링
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 1; i++) {
           data2.push({
             AcntID: response.data.success[i].AcntID,
             AcntName: response.data.success[i].AcntName,
@@ -167,4 +174,4 @@ setTimeout(() => {
     const root = ReactDOM.createRoot(container);
     root.render(<MainGrid />);
   }
-}, 10);
+}, 100);

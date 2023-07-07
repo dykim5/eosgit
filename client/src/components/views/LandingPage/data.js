@@ -28,16 +28,30 @@ export function getData() {
   return data;
 }
 
-// export function getData() {
-//   var data = [];
-//   for (var i = 0; i < 5; i++) {
-//     data.push({
-//       id: i,
-//       country: i + 1,
-//       sales: i + 2,
-//       expenses: i + 3,
-//     });
-//   }
+//top메뉴 목록 가져오기
+export function getTopMenuData() {
+  var data = [];
+  axios
+    .post("/api/users/getTopMenuData")
+    .then(function (response) {
+      // 성공 핸들링
+      for (var i = 0; i < response.data.success.length; i++) {
+        data.push({
+          MenuId: response.data.success[i].MenuId,
+          BoardNo: response.data.success[i].BoardNo,
+          MenuNo: response.data.success[i].MenuNo,
+          MenuName: response.data.success[i].MenuName,
+          ItemId: response.data.success[i].ItemId,
+        });
+      }
+    })
+    .catch(function (error) {
+      // 에러 핸들링
+      console.log(error);
+    })
+    .finally(function () {
+      // 항상 실행되는 영역
+    });
 
-//   return data;
-// }
+  return data;
+}

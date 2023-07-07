@@ -736,6 +736,34 @@ app.post("/api/users/insertacnttd", cors(), (req, res) => {
   });
 });
 
+//입출금 수정
+app.post("/api/users/updateAcnttd", cors(), (req, res) => {
+  var body = req.body.data;
+  var sql = "UPDATE e8test.Acnttd SET AcntID = ?, AcntName = ? , Inmny = ? , OutMny = ? , Descr = ?  WHERE TdID = ?";
+  var params = [body.AcntID, body.AcntName, body.InMny, body.OutMny, body.Descr, body.TdID];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log(" 실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+  });
+});
+
+app.post("/api/users/getTopMenuData", cors(), (req, res) => {
+  var body = req.body;
+  var sql = "SELECT * FROM e8test.menumt WHERE SiteID ='1' ORDER BY BoardNo asc, MenuNo  asc";
+  var params = [];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log("실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+    console.log(rows);
+  });
+});
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////        프린터  //////////////////////////////////////
@@ -898,9 +926,9 @@ app.post("/api/users/regist2", (req, res) => {
 });
 
 https.createServer(options, app).listen(5001, () => {
-  console.log(`HTTPS server started on port 5001`);
+  console.log(`보안서버(HTTPS)는 port 5001번 에서 기동중 입니다`);
 });
 
 app.listen(port, () => {
-  console.log(`server is listening at localhost:${process.env.PORT}`);
+  console.log(`일반서버(HTTP )는 port ${process.env.PORT}번 에서 기동중 입니다`);
 });
