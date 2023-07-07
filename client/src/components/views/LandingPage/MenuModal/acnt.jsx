@@ -1,37 +1,47 @@
 import React from "react";
 import { Button, Modal, DatePicker, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useImperativeHandle, forwardRef } from "react";
 import * as ReactDOM from "react-dom/client";
 import "./acntGrid.css";
 import { useHotkeys } from "react-hotkeys-hook";
 import dayjs from "dayjs";
 import AcntGrid from "./acntGrid";
-const Acnt = () => {
+
+const Acnt = forwardRef((props, ref) => {
+  useImperativeHandle(ref, () => ({
+    // 부모 컴포넌트에서 사용할 함수를 선언
+    acntModalOpen,
+  }));
+
+  function acntModalOpen() {
+    setOpen(true);
+  }
+
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState("입출금 그리드 작성");
 
-  const handleKeyPress = useCallback((event) => {
-    if (event.key === "F1") {
-      window.addEventListener("keydown", function (e) {
-        if (e.keyCode === 112) {
-          e.preventDefault();
-        }
-      });
-      setOpen(true);
-    }
-  }, []);
+  // const handleKeyPress = useCallback((event) => {
+  //   if (event.key === "F1") {
+  //     window.addEventListener("keydown", function (e) {
+  //       if (e.keyCode === 112) {
+  //         e.preventDefault();
+  //       }
+  //     });
+  //     setOpen(true);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    // attach the event listener
-    document.addEventListener("keydown", handleKeyPress);
+  // useEffect(() => {
+  //   // attach the event listener
+  //   document.addEventListener("keydown", handleKeyPress);
 
-    // remove the event listener
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [handleKeyPress]);
+  //   // remove the event listener
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyPress);
+  //   };
+  // }, [handleKeyPress]);
 
   const showModal = () => {
     setOpen(true);
@@ -108,7 +118,7 @@ const Acnt = () => {
       </Modal>
     </>
   );
-};
+});
 
 setTimeout(() => {
   const container = document.getElementById("acnt");

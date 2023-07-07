@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { MenuFoldOutlined, UserOutlined, FileOutlined, PoweroffOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Button, Layout, Menu, theme, Space, Select, Input, Row, Col } from "antd";
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import logo1 from "../../../img/logo1.png";
 import emptyImg from "../../../img/emptyImg.PNG";
 import NavBar from "../NavBar/NavBar";
@@ -13,11 +13,11 @@ import "./topGrid.css";
 import $ from "jquery";
 import { topData, middleData, bottomData } from "./data2";
 import { getTopMenuData } from "./data";
-
+import Acnt from "./MenuModal/acnt";
 //////////////////////////// 모달
 
-import "./MenuModal/acnt";
-import "./MenuModal/acntGrid";
+// import "./MenuModal/acnt";
+// import "./MenuModal/acntGrid";
 /////////////////////////////모달 끝
 //import wijmo from "@grapecity/wijmo.react.grid";
 
@@ -69,7 +69,58 @@ const onclickHandler = () => {
 };
 
 function LandingPage(props) {
+  const childComponentRef = useRef();
   const [collapsed, setCollapsed] = useState(false);
+
+  //bottom 메뉴의 단축키 실행
+  const handleKeyPress = useCallback((event) => {
+    // if (event.key === "F1") {
+    //   window.addEventListener("keydown", function (e) {
+    //     if (e.keyCode === 112) {
+    //       e.preventDefault();
+    //       childComponentRef.current.acntModalOpen();
+    //     }
+    //     //입출금
+    //     //acntModalOpen은 acnt.jsx 에서 정의하고 부모페이지로 보낼 함수 따로 작성했음.
+    //   });
+    // } else if (event.key === "F2") {
+    //   window.addEventListener("keydown", function (e) {
+    //     if (e.keyCode === 113) {
+    //       e.preventDefault();
+    //       childComponentRef.current.acntModalOpen();
+    //     }
+    //   });
+    // }
+
+    window.addEventListener("keydown", function (e) {
+      //F1일경우
+      if (e.keyCode === 112) {
+        e.preventDefault();
+        //입출금
+        //acntModalOpen은 acnt.jsx 에서 정의하고 부모페이지로 보낼 함수 따로 작성했음.
+        childComponentRef.current.acntModalOpen();
+      }
+
+      //F2
+      else if (e.keyCode === 113) {
+        e.preventDefault();
+        //상품찾기
+        childComponentRef.current.acntModalOpen();
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener("keydown", handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
+  ///////////////////////////////////////////////////////     단축키 제어 끝  ///////////////////////////////////////////////////////
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -161,7 +212,7 @@ function LandingPage(props) {
             >
               <h2>
                 {" "}
-                <div className="site-space-compact-wrapper">
+                <div className="site-space-compact-wrapper" style={{ width: "85%" }}>
                   <Space.Compact block>
                     <Select defaultValue="wholesale" allowClear>
                       <Option value="wholesale">도매</Option>
@@ -381,8 +432,12 @@ function LandingPage(props) {
               <br></br>
               */}
               <div className="topGrid">
-                <div className="div1 mg bg" id="acnt"></div>
-                <div className="div2 mg bg">test </div>
+                <div className="div1 mg bg">
+                  <Acnt ref={childComponentRef} />
+                </div>
+                <div className="div2 mg bg" id="itemmt">
+                  F2상품찾기
+                </div>
                 <div className="div3 mg bg">test </div>
                 <div className="div4 mg bg">test </div>
                 <div className="div5 mg bg">test </div>
