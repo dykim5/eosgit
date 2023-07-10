@@ -59,12 +59,16 @@ function print(data) {
 
   const arrayBuffer = new ArrayBuffer(4);
   const arr = new Uint8Array([190, 200, 179, 231]);
-  const cmds = ["SIZE 48 mm,25 mm", "CLS", 'TEXT 30,10,"4",0,1,1,"HackerNoon"', 'TEXT 30,50,"2",0,1,1,"WebUSB API"', 'BARCODE 30,80,"128",70,1,0,2,2,"test"', "PRINT 1", "END"];
-  const cmds2 = ["거래일자 :" + data.거래일자, "비고 : " + data.비고, "과목명 : " + data.과목명];
-  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, arr);
+  const cmds = ["", "TEST START ", data.거래일자, data.입금금액, data.출금금액, "SIZE 48 mm,25 mm", "COLOR RED", "TEST END", ""];
+  const cmds2 = ["거래일자 :" + data.거래일자, "비고 : " + data.입금금액, "과목명 : " + data.출금금액];
+  const cmds3 = ["", "TEST", ""];
+  // device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, arr);
+
+  // device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds2.join("\r\n"))));
+
   device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds.join("\r\n"))));
-  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds2.join("\r\n"))));
-  device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, encData);
+  //device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(cmds3.join("\r\n"))));
+  // device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, encData);
   //device.transferOut(device.configuration.interfaces[0].alternate.endpoints.find((obj) => obj.direction === "out").endpointNumber, new Uint8Array(new TextEncoder().encode(0x0a)));
 }
 
@@ -168,7 +172,7 @@ class AcntGrid extends React.Component {
         <br></br>
         <div className="container-fluid">
           <wjcGrid.FlexGrid id="agrid" initialized={this.initializeGrid.bind(this)} itemsSource={this.state.data} allowAddNew={true} allowDelete={true} newRowAtTo={this.state.newRowAtTop}>
-            <wjcGrid.FlexGridColumn
+            {/* <wjcGrid.FlexGridColumn
               binding="TdID"
               header="TdID"
               autofocus
@@ -176,7 +180,7 @@ class AcntGrid extends React.Component {
               ref={(c) => {
                 this.inputRef = c;
               }}
-            />
+            /> */}
             <wjcGrid.FlexGridColumn binding="거래일자" header="거래일자" isReadOnly={true} />
             {/* <wjcGrid.FlexGridColumn binding="거래시간" header="거래시간" isReadOnly={true} /> */}
             <wjcGrid.FlexGridColumn binding="과목ID" header="과목ID" isReadOnly={true} />
@@ -642,6 +646,8 @@ class AcntGrid extends React.Component {
           data.과목명 = view.currentItem.과목명;
           data.비고 = view.currentItem.비고;
           data.사용자명 = view.currentItem.사용자명;
+          data.입금금액 = view.currentItem.입금금액;
+          data.출금금액 = view.currentItem.출금금액;
           connectAndPrint(data);
         }
       },

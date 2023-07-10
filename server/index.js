@@ -750,6 +750,7 @@ app.post("/api/users/updateAcnttd", cors(), (req, res) => {
   });
 });
 
+//메뉴
 app.post("/api/users/getTopMenuData", cors(), (req, res) => {
   var body = req.body;
   var sql = "SELECT * FROM e8test.menumt WHERE SiteID ='1' ORDER BY BoardNo asc, MenuNo  asc";
@@ -760,7 +761,53 @@ app.post("/api/users/getTopMenuData", cors(), (req, res) => {
       res.status(200).json({
         success: rows,
       });
-    console.log(rows);
+    //console.log(rows);
+  });
+});
+
+//판매처 검색
+app.post("/api/main/getStoreData", cors(), (req, res) => {
+  var body = req.body;
+  var sql = "SELECT * FROM e8test.slrmt WHERE SiteID ='1' order by SlrID asc ";
+  var params = [];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log("실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+    //console.log(rows);
+  });
+});
+
+//상품검색
+app.post("/api/item/getItemSearch", cors(), (req, res) => {
+  var body = req.body;
+  var sql = "SELECT * FROM e8test.itemmt ORDER BY itemID asc  Limit 20 OFFSET 0 ";
+  var params = [body.dateVal];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log("실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+    //console.log(rows);
+  });
+});
+
+//상품검색 무한스크롤
+app.post("/api/item/getItemSearchMore", cors(), (req, res) => {
+  var body = req.body;
+  var sql = "SELECT * FROM e8test.itemmt ORDER BY itemID asc  Limit 20 OFFSET ? ";
+  var page = body.page * 20;
+  var params = [page];
+  connection.query(sql, params, function (err, rows, fields) {
+    if (err) console.log("실패 \n" + err);
+    else
+      res.status(200).json({
+        success: rows,
+      });
+    //console.log(rows);
   });
 });
 

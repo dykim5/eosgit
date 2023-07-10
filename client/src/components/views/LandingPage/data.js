@@ -55,3 +55,27 @@ export function getTopMenuData() {
 
   return data;
 }
+export var storeData2 = [];
+
+export function getStoreData() {
+  var axdata = [];
+  axios
+    .post("/api/main/getStoreData")
+    .then(function (response) {
+      // 성공 핸들링
+      for (var i = 0; i < response.data.success.length; i++) {
+        axdata.push(response.data.success[i].SlrName);
+      }
+    })
+    .catch(function (error) {
+      // 에러 핸들링
+      console.log(error);
+    })
+    .finally(function () {
+      console.log("dd");
+      console.log(axdata);
+      //this.storeData2 = axdata;
+    });
+
+  return axdata;
+}

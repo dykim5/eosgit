@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { MenuFoldOutlined, UserOutlined, FileOutlined, PoweroffOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { Button, Layout, Menu, theme, Space, Select, Input, Row, Col } from "antd";
+import { Button, Layout, Menu, theme, Space, Select, Input, Row, Col, Form, AutoComplete } from "antd";
 import { useState, useRef, useEffect, useCallback } from "react";
 import logo1 from "../../../img/logo1.png";
 import emptyImg from "../../../img/emptyImg.PNG";
@@ -11,9 +11,10 @@ import "./mainGrid";
 import "./middleGrid.css";
 import "./topGrid.css";
 import $ from "jquery";
-import { topData, middleData, bottomData } from "./data2";
-import { getTopMenuData } from "./data";
+import { topData, middleData, bottomData, storeData } from "./data2";
+import { getTopMenuData, getStoreData } from "./data";
 import Acnt from "./MenuModal/acnt";
+import Item from "./ItemModal/item";
 //////////////////////////// 모달
 
 // import "./MenuModal/acnt";
@@ -67,11 +68,36 @@ const onclickHandler = () => {
     }
   });
 };
+var testdata = [];
+function getStoreData2() {
+  var axdata = [];
+  axios
+    .post("/api/main/getStoreData")
+    .then(function (response) {
+      // 성공 핸들링
+      for (var i = 0; i < response.data.success.length; i++) {
+        testdata.push(response.data.success[i].SlrName);
+      }
+    })
+    .catch(function (error) {
+      // 에러 핸들링
+      console.log(error);
+    })
+    .finally(function () {
+      console.log(testdata);
+      //testdata = axdata;
+    });
+}
 
 function LandingPage(props) {
-  const childComponentRef = useRef();
+  const childComponentRef = useRef(); //상품자료
+  const childComponentRef2 = useRef(); //입출금
   const [collapsed, setCollapsed] = useState(false);
-
+  getTopMenuData();
+  getStoreData();
+  getStoreData2();
+  const storeData3 = [];
+  //debugger;
   //bottom 메뉴의 단축키 실행
   const handleKeyPress = useCallback((event) => {
     // if (event.key === "F1") {
@@ -98,14 +124,14 @@ function LandingPage(props) {
         e.preventDefault();
         //입출금
         //acntModalOpen은 acnt.jsx 에서 정의하고 부모페이지로 보낼 함수 따로 작성했음.
-        childComponentRef.current.acntModalOpen();
+        childComponentRef2.current.acntModalOpen();
       }
 
       //F2
       else if (e.keyCode === 113) {
         e.preventDefault();
         //상품찾기
-        childComponentRef.current.acntModalOpen();
+        childComponentRef.current.itemModalOpen();
       }
     });
   }, []);
@@ -124,7 +150,7 @@ function LandingPage(props) {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  getTopMenuData();
+
   return (
     <>
       <NavBar></NavBar>
@@ -213,104 +239,120 @@ function LandingPage(props) {
               <h2>
                 {" "}
                 <div className="site-space-compact-wrapper" style={{ width: "85%" }}>
-                  <Space.Compact block>
+                  {/* <Space.Compact block>
                     <Select defaultValue="wholesale" allowClear>
                       <Option value="wholesale">도매</Option>
                       <Option value="retail">소매</Option>
                     </Select>
-                    <Input
+                    <Select mode="multiple" placeholder="">
+                      {storeData.map((data, index) => (
+                        <>
+                          <Option value={data}>{data}</Option>
+                        </>
+                      ))}
+                    </Select>
+                  </Space.Compact> */}
+                  <Form.Item
+                    name="select-multiple"
+                    label="도매"
+                    rules={[
+                      {
+                        required: true,
+                        message: "",
+                        type: "array",
+                      },
+                    ]}
+                  >
+                    <Select mode="multiple" placeholder="">
+                      {storeData.map((data, index) => (
+                        <>
+                          <Option value={data}>{data}</Option>
+                        </>
+                      ))}
+                    </Select>
+                    {/* <AutoComplete
                       style={{
-                        width: "100%",
+                        width: 200,
                       }}
-                      defaultValue=""
-                    />
-                    {/* <Select
-                      allowClear
-                      //mode="multiple"
-                      mode="single"
-                      defaultValue=""
-                      style={{
-                        width: "70%",
-                      }}
-                    >
-                      <Option value="wholesale">test2</Option>
-                      <Option value="retail">test3</Option>
-                    </Select> */}
-                  </Space.Compact>
+                      options={bottomData}
+                      placeholder="try to type `b`"
+                      filterOption={(inputValue, option) => option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                    /> */}
+                  </Form.Item>
                 </div>
               </h2>
 
-              <br />
-
               <div id="mainGrid" className="wj-flexgrid2"></div>
-              <div style={{ margin: "7px" }}>
-                <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "blue", margin: "7px" }}>
-                  <table>
-                    <tr>
-                      <th style={{ width: "20%" }}>판매소계 :</th>
-                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                      <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;(0)</th>
-                    </tr>
-                  </table>
-                </div>
-                <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "red", margin: "7px" }}>
-                  <table>
-                    <tr>
-                      <th style={{ width: "20%" }}>반품소계 :</th>
-                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                      <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                      <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;0%</th>
-                    </tr>
-                  </table>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      float: "left",
-                      boxSizing: "border-box",
-                      width: "58%",
-                      border: "1px solid",
-                      borderRadius: "8px",
-                      //background: "darkgray",
-                    }}
-                  >
-                    <div style={{ fontWeight: 700, fontSize: "large", color: "black", height: "40px", margin: "2px" }}>
-                      <div style={{ float: "left" }}>전잔 :</div>
-                      <div style={{ float: "right" }}>0(0)&nbsp;&nbsp;</div>
-                    </div>
-                    <div style={{ fontWeight: 700, fontSize: "large", color: "blue", height: "40px", margin: "2px" }}>
-                      <div style={{ float: "left" }}>당일합계 :</div>
-                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
-                    </div>
-                    <div style={{ fontWeight: 700, fontSize: "large", color: "red", height: "40px", margin: "2px" }}>
-                      {" "}
-                      <div style={{ float: "left" }}>입금합계 :</div>
-                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
-                    </div>
-                    <div style={{ fontWeight: 700, fontSize: "large", color: "red", height: "40px", margin: "2px" }}>
-                      {" "}
-                      <div style={{ float: "left" }}>할인금액 :</div>
-                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
-                    </div>
-                    <div style={{ fontWeight: 700, fontSize: "large", color: "black", height: "40px", margin: "2px" }}>
-                      <div style={{ float: "left" }}>당잔 :</div>
-                      <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
-                    </div>
+              <div>
+                <div style={{ margin: "7px" }}>
+                  <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "blue", margin: "7px" }}>
+                    <table style={{ width: "90%" }}>
+                      <tr>
+                        <th style={{ width: "20%" }}>판매소계 :</th>
+                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                        <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;(0)</th>
+                      </tr>
+                    </table>
                   </div>
-                  <div
-                    style={{
-                      float: "right",
-                      boxSizing: "border-box",
-                      width: "40%",
-                      height: "100%",
-                      border: "1px solid",
-                      margin: "3px",
-                    }}
-                  >
-                    <img src={emptyImg} style={{ width: "100%", height: "100%" }}></img>
+                  <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "red", margin: "7px" }}>
+                    <table style={{ width: "90%" }}>
+                      <tr>
+                        <th style={{ width: "20%" }}>반품소계 :</th>
+                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                        <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;0%</th>
+                      </tr>
+                    </table>
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        float: "left",
+                        boxSizing: "border-box",
+                        width: "58%",
+                        border: "1px solid",
+                        borderRadius: "8px",
+                        //background: "darkgray",
+                      }}
+                    >
+                      <div style={{ fontWeight: 700, fontSize: "large", color: "black", height: "40px", margin: "2px" }}>
+                        <div style={{ float: "left" }}>전잔 :</div>
+                        <div style={{ float: "right" }}>0(0)&nbsp;&nbsp;</div>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: "large", color: "blue", height: "40px", margin: "2px" }}>
+                        <div style={{ float: "left" }}>당일합계 :</div>
+                        <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: "large", color: "red", height: "40px", margin: "2px" }}>
+                        {" "}
+                        <div style={{ float: "left" }}>입금합계 :</div>
+                        <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: "large", color: "red", height: "40px", margin: "2px" }}>
+                        {" "}
+                        <div style={{ float: "left" }}>할인금액 :</div>
+                        <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: "large", color: "black", height: "40px", margin: "2px" }}>
+                        <div style={{ float: "left" }}>당잔 :</div>
+                        <div style={{ float: "right" }}>(0)&nbsp;&nbsp;</div>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        float: "right",
+                        boxSizing: "border-box",
+                        width: "40%",
+                        height: "100%",
+                        border: "1px solid",
+                        margin: "3px",
+                      }}
+                    >
+                      <img src={emptyImg} style={{ width: "100%", height: "250px" }}></img>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -433,34 +475,34 @@ function LandingPage(props) {
               */}
               <div className="topGrid">
                 <div className="div1 mg bg">
-                  <Acnt ref={childComponentRef} />
+                  <Acnt ref={childComponentRef2} />
                 </div>
-                <div className="div2 mg bg" id="itemmt">
-                  F2상품찾기
+                <div className="div2 mg bg">
+                  <Item ref={childComponentRef} />
                 </div>
-                <div className="div3 mg bg">test </div>
-                <div className="div4 mg bg">test </div>
-                <div className="div5 mg bg">test </div>
-                <div className="div6 mg bg">test </div>
-                <div className="div7 mg bg">test </div>
-                <div className="div8 mg bg">test </div>
-                <div className="div9 mg bg">test </div>
-                <div className="div10 mg bg">test </div>
-                <div className="div11 mg bg">test </div>
-                <div className="div12 mg bg">test </div>
-                <div className="div13 mg bg">test </div>
-                <div className="div14 mg bg">test </div>
-                <div className="div15 mg bg">test </div>
-                <div className="div16 mg bg">test </div>
-                <div className="div17 mg bg">test </div>
-                <div className="div18 mg bg">test </div>
-                <div className="div19 mg bg">test </div>
-                <div className="div20 mg bg">test </div>
-                <div className="div21 mg bg">test </div>
-                <div className="div22 mg bg">test </div>
-                <div className="div23 mg bg">test </div>
-                <div className="div24 mg bg">test </div>
-                <div className="div25 mg bg">test </div>
+                <div className="div3 mg bg">F3 도매/소매 </div>
+                <div className="div4 mg bg">F4 판매/반품 </div>
+                <div className="div5 mg bg">F5 전체취소 </div>
+                <div className="div6 mg bg">F6 수량합산 </div>
+                <div className="div7 mg bg">F7 입금/할인 </div>
+                <div className="div8 mg bg">비 고 </div>
+                <div className="div9 mg bg">F9 보류/복귀</div>
+                <div className="div10 mg bg">F10 처리 </div>
+                <div className="div11 mg bg">메뉴판설정 </div>
+                <div className="div12 mg bg">금일내역 </div>
+                <div className="div13 mg bg">업체내역 </div>
+                <div className="div14 mg bg">업체찾기 </div>
+                <div className="div15 mg bg">새로고침 </div>
+                <div className="div16 mg bg">환경설정 </div>
+                <div className="div17 mg bg">부과세관리 </div>
+                <div className="div18 mg bg">이고내역 </div>
+                <div className="div19 mg bg">샘플/회수 </div>
+                <div className="div20 mg bg">종료 </div>
+                <div className="div21 mg bg">미송/해제 </div>
+                <div className="div22 mg bg">미송관리 </div>
+                <div className="div23 mg bg">한줄삭제 </div>
+                <div className="div24 mg bg">주문 </div>
+                <div className="div25 mg bg">입고내역 </div>
               </div>
 
               {/* <div className="container-fluid">

@@ -8,9 +8,10 @@
 }
 
 .mg {
-  height: 70px;
+  height: 90px;
+  text-align: center;
   /* width: 145px; */
-  border-style: groove;
+  /* border-style: groove; */
 }
 
 .div1 {

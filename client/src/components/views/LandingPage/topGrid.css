@@ -6,7 +6,8 @@
   grid-row-gap: 1px;
 }
 .mg {
-  height: 60px;
+  height: 75px;
+  text-align: center;
   border-style: groove;
 }
 
