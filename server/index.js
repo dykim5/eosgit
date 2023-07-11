@@ -522,9 +522,9 @@ app.post("/api/users/myjob", cors(), (req, res) => {
   var params = [body.AspName, body.SiteId, body.UserId];
   connection.query(sql, params, function (err, rows, fields) {
     console.log("myjob확인");
-    console.log(rows);
+    //console.log(rows);
     let result = Object.values(JSON.parse(JSON.stringify(rows)));
-    console.log(result);
+    //console.log(result);
     if (err) {
       console.log("서버오류입니다. \n" + err);
     } else if (result.length > 0) {
@@ -708,7 +708,7 @@ app.post("/api/users/getacnttd", cors(), (req, res) => {
       res.status(200).json({
         success: rows,
       });
-    console.log(rows);
+    //console.log(rows);
   });
 });
 
