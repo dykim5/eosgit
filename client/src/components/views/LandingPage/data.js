@@ -14,7 +14,7 @@ export function getData() {
           sales: response.data.success[i].AcntID,
           expenses: response.data.success[i].AcntID,
         });
-        console.log(response.data.success[i].AcntID);
+        //console.log(response.data.success[i].AcntID);
       }
     })
     .catch(function (error) {
@@ -73,7 +73,7 @@ export function getStoreData() {
     })
     .finally(function () {
       console.log("dd");
-      console.log(axdata);
+      //console.log(axdata);
       //this.storeData2 = axdata;
     });
 

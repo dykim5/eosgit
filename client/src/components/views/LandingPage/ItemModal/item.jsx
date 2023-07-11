@@ -43,8 +43,8 @@ const Item = forwardRef((props, ref) => {
 
   return (
     <>
-      <div onClick={showModal}>F2 상품자료</div>
-      <Modal title="상품자료" open={open} onOk={handleOk} confirmLoading={confirmLoading} onCancel={handleCancel} footer={[]}>
+      <div onClick={showModal}>F5 상품자료</div>
+      <Modal class="itemModal" title="상품자료" open={open} onOk={handleOk} confirmLoading={confirmLoading} onCancel={handleCancel} footer={[]}>
         <br></br>
         <br></br>
         {/* <div id="itemGrid"></div> */}

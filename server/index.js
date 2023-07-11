@@ -521,12 +521,24 @@ app.post("/api/users/myjob", cors(), (req, res) => {
 
   var params = [body.AspName, body.SiteId, body.UserId];
   connection.query(sql, params, function (err, rows, fields) {
-    if (err) console.log(" 실패 \n" + err);
-    else req.session.HostName = rows[0].HostName;
-    req.session.AspName = rows[0].AspName;
-    console.log(req.session.HostName);
-    console.log(req.session.AspName);
-    res.redirect(307, "/api/users/login");
+    console.log("myjob확인");
+    console.log(rows);
+    let result = Object.values(JSON.parse(JSON.stringify(rows)));
+    console.log(result);
+    if (err) {
+      console.log("서버오류입니다. \n" + err);
+    } else if (result.length > 0) {
+      req.session.HostName = rows[0].HostName;
+      req.session.AspName = rows[0].AspName;
+      console.log(req.session.HostName);
+      console.log(req.session.AspName);
+      res.redirect(307, "/api/users/login");
+    } else {
+      res.status(200).json({
+        loginSuccess: false,
+        msg: "계정ID 혹은 매장번호를 다시 확인해주세요.",
+      });
+    }
   });
 });
 
@@ -550,14 +562,17 @@ app.post("/api/users/login", cors(), (req, res) => {
   });
 
   conn2.query(passSql, params, async function (err, rows, fields) {
+    console.log("로그인로직");
+    console.log(rows);
+    let result = Object.values(JSON.parse(JSON.stringify(rows)));
     if (err) console.log(" 실패 \n" + err);
-    else {
+    else if (result.length > 0) {
       var UserID = rows[0].UserID;
       req.session.UserID = UserID;
       if (rows[0].EncPassword == null) {
         res.status(200).json({
           loginSuccess: false,
-          msg: "웹 회원이 아닙니다",
+          msg: "웹 회원이 아닙니다 ",
         });
         return;
       }
@@ -600,6 +615,11 @@ app.post("/api/users/login", cors(), (req, res) => {
           }
         });
       }
+    } else {
+      res.status(200).json({
+        loginSuccess: false,
+        msg: "회원정보를 잘못 입력하였습니다.",
+      });
     }
   });
 }); //login

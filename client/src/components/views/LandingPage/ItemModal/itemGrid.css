@@ -21,3 +21,7 @@
   z-index: 1600 !important;
   position: relative !important;
 }
+
+.itemModal {
+  font-size: xx-large !important;
+}

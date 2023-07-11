@@ -4,19 +4,18 @@
   grid-template-rows: repeat(5, 1fr);
   grid-column-gap: 1px;
   grid-row-gap: 1px;
-}
-.mg {
-  height: 75px;
-  text-align: center;
-  border-style: groove;
-}
-
-.tg {
-  background-color: #dde9f2;
+  vertical-align: bottom !important;
 }
 
 .bg {
   background-color: #f9efa7;
+  border-style: groove;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75px;
+  font-size: initial;
+  font-weight: 500;
 }
 
 .div1 {

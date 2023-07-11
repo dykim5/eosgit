@@ -84,7 +84,7 @@ function getStoreData2() {
       console.log(error);
     })
     .finally(function () {
-      console.log(testdata);
+      //console.log(testdata);
       //testdata = axdata;
     });
 }
@@ -117,9 +117,10 @@ function LandingPage(props) {
     //     }
     //   });
     // }
-
+    //debugger;
     window.addEventListener("keydown", function (e) {
       //F1일경우
+
       if (e.keyCode === 112) {
         e.preventDefault();
         //입출금
@@ -127,8 +128,8 @@ function LandingPage(props) {
         childComponentRef2.current.acntModalOpen();
       }
 
-      //F2
-      else if (e.keyCode === 113) {
+      //F5
+      else if (e.keyCode === 116) {
         e.preventDefault();
         //상품찾기
         childComponentRef.current.itemModalOpen();
@@ -208,7 +209,7 @@ function LandingPage(props) {
               }}
             />
             <img src={logo1} style={{ float: "left" }}></img>
-            사용자 : / 업체 : | 보류 : |
+            사용자 : {window.localStorage.getItem("UserName")} / 업체 : 1.매장 &nbsp;&nbsp;&nbsp; v 1.00 | &nbsp;&nbsp;&nbsp; 보류 : |
             <div
               style={{
                 float: "right",
@@ -287,24 +288,28 @@ function LandingPage(props) {
                 <div style={{ margin: "7px" }}>
                   <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "blue", margin: "7px" }}>
                     <table style={{ width: "90%" }}>
-                      <tr>
-                        <th style={{ width: "20%" }}>판매소계 :</th>
-                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                        <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;(0)</th>
-                      </tr>
+                      <thead>
+                        <tr>
+                          <th style={{ width: "20%" }}>판매소계 :</th>
+                          <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                          <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                          <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                          <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;(0)</th>
+                        </tr>
+                      </thead>
                     </table>
                   </div>
                   <div style={{ width: "100%", fontWeight: 700, fontSize: "large", color: "red", margin: "7px" }}>
                     <table style={{ width: "90%" }}>
-                      <tr>
-                        <th style={{ width: "20%" }}>반품소계 :</th>
-                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                        <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
-                        <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;0%</th>
-                      </tr>
+                      <thead>
+                        <tr>
+                          <th style={{ width: "20%" }}>반품소계 :</th>
+                          <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                          <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                          <th style={{ width: "20%" }}>&nbsp;&nbsp;0</th>
+                          <th style={{ width: "20%", float: "right" }}>&nbsp;&nbsp;0%</th>
+                        </tr>
+                      </thead>
                     </table>
                   </div>
                   <div>
@@ -377,26 +382,30 @@ function LandingPage(props) {
             >
               <table style={{ width: "100%", backgroundColor: "#dde9f2", textAlign: "Center" }}>
                 {topData.map((data, index) => (
-                  <tr data-index={index}>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.a}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.b}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.c}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.d}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.e}</td>
-                  </tr>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.a}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.b}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.c}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.d}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.e}</th>
+                    </tr>
+                  </thead>
                 ))}
               </table>
               <br></br>
 
               <table style={{ width: "100%", backgroundColor: "white", textAlign: "Center" }}>
                 {middleData.map((data, index) => (
-                  <tr data-index={index}>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.a}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.b}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.c}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.d}</td>
-                    <td style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.e}</td>
-                  </tr>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.a}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.b}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.c}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.d}</th>
+                      <th style={{ width: "20%", height: "70px", border: "3px groove" }}>{data.e}</th>
+                    </tr>
+                  </thead>
                 ))}
               </table>
               <br></br>
@@ -474,35 +483,35 @@ function LandingPage(props) {
               <br></br>
               */}
               <div className="topGrid">
-                <div className="div1 mg bg">
+                <div className="div1 bg">
                   <Acnt ref={childComponentRef2} />
                 </div>
-                <div className="div2 mg bg">
+                <div className="div2 bg">
                   <Item ref={childComponentRef} />
                 </div>
-                <div className="div3 mg bg">F3 도매/소매 </div>
-                <div className="div4 mg bg">F4 판매/반품 </div>
-                <div className="div5 mg bg">F5 전체취소 </div>
-                <div className="div6 mg bg">F6 수량합산 </div>
-                <div className="div7 mg bg">F7 입금/할인 </div>
-                <div className="div8 mg bg">비 고 </div>
-                <div className="div9 mg bg">F9 보류/복귀</div>
-                <div className="div10 mg bg">F10 처리 </div>
-                <div className="div11 mg bg">메뉴판설정 </div>
-                <div className="div12 mg bg">금일내역 </div>
-                <div className="div13 mg bg">업체내역 </div>
-                <div className="div14 mg bg">업체찾기 </div>
-                <div className="div15 mg bg">새로고침 </div>
-                <div className="div16 mg bg">환경설정 </div>
-                <div className="div17 mg bg">부과세관리 </div>
-                <div className="div18 mg bg">이고내역 </div>
-                <div className="div19 mg bg">샘플/회수 </div>
-                <div className="div20 mg bg">종료 </div>
-                <div className="div21 mg bg">미송/해제 </div>
-                <div className="div22 mg bg">미송관리 </div>
-                <div className="div23 mg bg">한줄삭제 </div>
-                <div className="div24 mg bg">주문 </div>
-                <div className="div25 mg bg">입고내역 </div>
+                <div className="div3 bg">F3 도매/소매 </div>
+                <div className="div4 bg">F4 판매/반품 </div>
+                <div className="div5 bg">F2 전체취소 </div>
+                <div className="div6 bg">F6 수량합산 </div>
+                <div className="div7 bg">F7 입금/할인 </div>
+                <div className="div8 bg">비 고 </div>
+                <div className="div9 bg">F9 보류/복귀</div>
+                <div className="div10 bg">F10 처리 </div>
+                <div className="div11 bg">메뉴판설정 </div>
+                <div className="div12 bg">금일내역 </div>
+                <div className="div13 bg">업체내역 </div>
+                <div className="div14 bg">업체찾기 </div>
+                <div className="div15 bg">새로고침 </div>
+                <div className="div16 bg">환경설정 </div>
+                <div className="div17 bg">부과세관리 </div>
+                <div className="div18 bg">이고내역 </div>
+                <div className="div19 bg">샘플/회수 </div>
+                <div className="div20 bg">종료 </div>
+                <div className="div21 bg">미송/해제 </div>
+                <div className="div22 bg">미송관리 </div>
+                <div className="div23 bg">한줄삭제 </div>
+                <div className="div24 bg">주문 </div>
+                <div className="div25 bg">입고내역 </div>
               </div>
 
               {/* <div className="container-fluid">

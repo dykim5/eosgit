@@ -27,7 +27,13 @@ var isFirstCheck = isFirst ?? true;
 // const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
 // const customFormat = (value) => `custom format: ${value.format(dateFormat)}`;
 // const customWeekStartEndFormat = (value) => `${dayjs(value).startOf("week").format(weekFormat)} ~ ${dayjs(value).endOf("week").format(weekFormat)}`;
-
+const resetFuntion = () => {
+  window.localStorage.removeItem("AspName");
+  window.localStorage.removeItem("SiteId");
+  window.localStorage.removeItem("isFirst");
+  window.localStorage.removeItem("UserName");
+  window.location.reload();
+};
 function LoginPage() {
   const dispatch = useDispatch();
   const [AspName, setAspName] = useState("");
@@ -55,6 +61,7 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
+  //로그인로직
   const onFinish = (event) => {
     //페이지 refresh를 막아준다
     //event.preventDefault();
@@ -78,6 +85,7 @@ function LoginPage() {
         window.localStorage.setItem("AspName", SendAspName);
         window.localStorage.setItem("SiteId", SendSiteId);
         window.localStorage.setItem("isFirst", false);
+        window.localStorage.setItem("UserName", UserName);
         navigate("/main");
       } else {
         alert(response.payload.msg);
@@ -117,13 +125,19 @@ function LoginPage() {
         }}
       >
         {isFirstCheck === true ? null : (
-          <div>
-            <label id="isFirst" name="isFirst" className="isFirst" style={{ color: "white" }}>
-              업무일자{" "}
-            </label>
-            <br></br>
-            <DatePicker id="isFirst2" defaultValue={nowDate} format={dateFormat} />
-          </div>
+          <>
+            <Space direction="horizontal">
+              <label id="isFirst" name="isFirst" className="isFirst" style={{ color: "white" }}>
+                업무일자{" "}
+              </label>
+              <br></br>
+              <DatePicker id="isFirst2" defaultValue={nowDate} format={dateFormat} />
+
+              <Button style={{ width: 80 }} onClick={resetFuntion}>
+                초기화
+              </Button>
+            </Space>
+          </>
         )}
 
         {/* <div style={style}> </div> */}
